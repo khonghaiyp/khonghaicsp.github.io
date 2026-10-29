@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <title>Slide HTML Cơ Bản</title>
+  <style>
+    body { font-family: Arial, sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; background: #f0f0f0; }
+    .slide-container { width: 600px; height: 350px; background: #fff; box-shadow: 0 4px 10px rgba(0,0,0,0.1); border-radius: 8px; position: relative; overflow: hidden; }
+    .slide { display: none; padding: 40px; text-align: center; height: 100%; box-sizing: border-box; }
+    .slide.active { display: block; }
+    .buttons { position: absolute; bottom: 20px; width: 100%; display: flex; justify-content: space-between; padding: 0 20px; box-sizing: border-box; }
+    button { padding: 8px 16px; cursor: pointer; border: none; background: #007bff; color: white; border-radius: 4px; }
+  </style>
+</head>
+<body>
+
+<div class="slide-container">
+  <div class="slide active">
+    <h2>Slide 1: Giới thiệu</h2>
+    <p>Chào mừng bạn đến với slide trình chiếu bằng HTML!</p>
+  </div>
+
+
+  <div class="slide">
+    <h2>Slide 2: Lợi ích</h2>
+    <p>Định nghĩa:</p>
+       Biến ngẫu nhiên là một đại lượng có thể nhận các giá trị khác nhau trong một khoảng xác định.
+  </div>
+  <div class="slide">
+    <h2>Slide 3: Kết luận</h2>
+    <p>Cảm ơn bạn đã theo dõi!</p>
+  </div>
+
+  <div class="buttons">
+    <button onclick="changeSlide(-1)">❮ Trước</button>
+    <button onclick="changeSlide(1)">Sau ❯</button>
+  </div>
+</div>
+
+<script>
+  let currentSlide = 0;
+  const slides = document.querySelectorAll('.slide');
+
+  function changeSlide(direction) {
+    slides[currentSlide].classList.remove('active');
+    currentSlide = (currentSlide + direction + slides.length) % slides.length;
+    slides[currentSlide].classList.add('active');
+  }
+</script>
+
+</body>
+</html>

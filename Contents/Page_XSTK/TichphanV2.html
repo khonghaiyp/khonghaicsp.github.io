@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bảng Nguyên Hàm và Cách Tính Tích Phân Kép</title>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f9f9f9;
+            color: #333;
+        }
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+            border-bottom: 3px solid #3498db;
+            padding-bottom: 10px;
+        }
+        h2 {
+            color: #2980b9;
+            margin-top: 30px;
+            border-left: 4px solid #3498db;
+            padding-left: 10px;
+        }
+        h3 {
+            color: #16a085;
+            margin-top: 25px;
+        }
+        h4 {
+            color: #27ae60;
+            margin-top: 20px;
+        }
+        .section {
+            background: white;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .formula {
+            background: #f0f8ff;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+            border-left: 3px solid #3498db;
+        }
+        .example {
+            background: #e8f5e9;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+            border-left: 3px solid #27ae60;
+        }
+        .note {
+            background: #fff3cd;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+            border-left: 3px solid #f39c12;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            background: white;
+        }
+        th {
+            background-color: #3498db;
+            color: white;
+            padding: 12px;
+            text-align: left;
+            border: 1px solid #2980b9;
+        }
+        td {
+            padding: 10px;
+            border: 1px solid #ddd;
+        }
+        tr:nth-child(even) {
+            background-color: #f8f9fa;
+        }
+        tr:hover {
+            background-color: #e8f4f8;
+        }
+        ul, ol {
+            margin-left: 20px;
+        }
+        li {
+            margin: 8px 0;
+        }
+        .step {
+            background: #e3f2fd;
+            padding: 10px 15px;
+            margin: 10px 0;
+            border-radius: 5px;
+            border-left: 3px solid #2196f3;
+        }
+        .step-number {
+            background: #2196f3;
+            color: white;
+            padding: 2px 8px;
+            border-radius: 3px;
+            font-weight: bold;
+            margin-right: 8px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Bảng Nguyên Hàm của Các Hàm Cơ Bản và Cách Tính Tích Phân Kép</h1>
+
+    <!-- PHẦN 1: BẢNG NGUYÊN HÀM -->
+    <div class="section">
+        <h2>1. Bảng Nguyên Hàm của Các Hàm Cơ Bản</h2>
+        <pTrong bảng dưới đây, \(C\) là hằng số nguyên hàm bất kỳ.</p>
+
+        <h3>1.1. Nguyên hàm của hàm đại số</h3>
+        <table>
+            <tr>
+                <th>Hàm \(f(x)\)</th>
+                <th>Nguyên hàm \(\int f(x) \, dx\)</th>
+                <th>Điều kiện</th>
+            </tr>
+            <tr>
+                <td>\(0\)</td>
+                <td>\(C\)</td>
+                <td>-</td>
+            </tr>
+            <tr>
+                <td>\(1\)</td>
+                <td>\(x + C\)</td>
+                <td>-</td>
+            </tr>
+            <tr>
+                <td>\(x^n\)</td>
+                <td>\(\frac{x^{n+1}}{n+1} + C\)</td>
+                <td>\(n \neq -1\)</td>
+            </tr>
+            <tr>
+                <td>\(\frac{1}{x}\)</td>
+                <td>\(\ln|x| + C\)</td>
+                <td>\(x \neq 0\)</td>
+            </tr>
+            <tr>
+                <td>\(\frac{1}{x^2}\)</td>
+                <td>\(-\frac{1}{x} + C\)</td>
+                <td>\(x \neq 0\)</td>
+            </tr>
+            <tr>
+                <td>\(\frac{1}{\sqrt{x}}\)</td>
+                <td>\(2\sqrt{x} + C\)</td>
+                <td>\(x > 0\)</td>
+            </tr>
+        </table>
+
+        <h3>1.2. Nguyên hàm của hàm mũ và logarit</h3>
+        <table>
+            <tr>
+                <th>Hàm \(f(x)\)</th>
+                <th>Nguyên hàm \(\int f(x) \, dx\)</th>
+                <th>Điều kiện</th>
+            </tr>
+            <tr>
+                <td>\(e^x\)</td>
+                <td>\(e^x + C\)</td>
+                <td>-</td>
+            </tr>
+            <tr>
+                <td>\(a^x\)</td>
+                <td>\(\frac{a^x}{\ln a} + C\)</td>
+                <td>\(a > 0, a \neq 1\)</td>
+            </tr>
+            <tr>
+                <td>\(\ln x\)</td>
+                <td>\(x\ln x - x + C\)</td>
+                <td>\(x > 0\)</td>
+            </tr>
+            <tr>
+                <td>\(\frac{1}{x}\)</td>
+                <td>\(\ln|x| + C\)</td>
+                <td>\(x \neq 0\)</td>
+            </tr>
+        </table>
+
+        <h3>1.3. Nguyên hàm của hàm lượng giác</h3>
+        <table>
+            <tr>
+                <th>Hàm \(f(x)\)</th>
+                <th>Nguyên hàm \(\int f(x) \, dx\)</th>
+                <th>Điều kiện</th>
+            </tr>
+            <tr>
+                <td>\(\sin x\)</td>
+                <td>\(-\cos x + C\)</td>
+                <td>-</td>
+            </tr>
+            <tr>
+                <td>\(\cos x\)</td>
+                <td>\(\sin x + C\)</td>
+                <td>-</td>
+            </tr>
+            <tr>
+                <td>\(\frac{1}{\cos^2 x} = \sec^2 x\)</td>
+                <td>\(\tan x + C\)</td>
+                <td>\(\cos x \neq 0\)</td>
+            </tr>
+            <tr>
+                <td>\(\frac{1}{\sin^2 x} = \csc^2 x\)</td>
+                <td>\(-\cot x + C\)</td>
+                <td>\(\sin x \neq 0\)</td>
+            </tr>
+            <tr>
+                <td>\(\tan x\)</td>
+                <td>\(-\ln|\cos x| + C\)</td>
+                <td>\(\cos x \neq 0\)</td>
+            </tr>
+            <tr>
+                <td>\(\cot x\)</td>
+                <td>\(\ln|\sin x| + C\)</td>
+                <td>\(\sin x \neq 0\)</td>
+            </tr>
+            <tr>
+                <td>\(\sin^2 x\)</td>
+                <td>\(\frac{x}{2} - \frac{\sin 2x}{4} + C\)</td>
+                <td>-</td>
+            </tr>
+            <tr>
+                <td>\(\cos^2 x\)</td>
+                <td>\(\frac{x}{2} + \frac{\sin 2x}{4} + C\)</td>
+                <td>-</td>
+            </tr>
+        </table>
+
+        <h3>1.4. Nguyên hàm của hàm dạng đặc biệt</h3>
+        <table>
+            <tr>
+                <th>Hàm \(f(x)\)</th>
+                <th>Nguyên hàm \(\int f(x) \, dx\)</th>
+                <th>Điều kiện</th>
+            </tr>
+            <tr>
+                <td>\(\frac{1}{a^2 + x^2}\)</td>
+                <td>\(\frac{1}{a}\arctan\left(\frac{x}{a}\right) + C\)</td>
+                <td>\(a \neq 0\)</td>
+            </tr>
+            <tr>
+                <td>\(\frac{1}{\sqrt{a^2 - x^2}}\)</td>
+                <td>\(\arcsin\left(\frac{x}{a}\right) + C\)</td>
+                <td>\(|x| < |a|\)</td>
+            </tr>
+            <tr>
+                <td>\(\frac{1}{\sqrt{x^2 + a^2}}\)</td>
+                <td>\(\ln|x + \sqrt{x^2 + a^2}| + C\)</td>
+                <td>\(a \neq 0\)</td>
+            </tr>
+            <tr>
+                <td>\(\frac{1}{x^2 - a^2}\)</td>
+                <td>\(\frac{1}{2a}\ln\left|\frac{x-a}{x+a}\right| + C\)</td>
+                <td>\(|x| \neq |a|\)</td>
+            </tr>
+            <tr>
+                <td>\(\sqrt{a^2 - x^2}\)</td>
+                <td>\(\frac{x}{2}\sqrt{a^2 - x^2} + \frac{a^2}{2}\arcsin\left(\frac{x}{a}\right) + C\)</td>
+                <td>\(|x| \leq |a|\)</td>
+            </tr>
+            <tr>
+                <td>\(e^{ax}\)</td>
+                <td>\(\frac{1}{a}e^{ax} + C\)</td>
+                <td>\(a \neq 0\)</td>
+            </tr>
+            <tr>
+                <td>\(\sin(ax)\)</td>
+                <td>\(-\frac{1}{a}\cos(ax) + C\)</td>
+                <td>\(a \neq 0\)</td>
+            </tr>
+            <tr>
+                <td>\(\cos(ax)\)</td>
+                <td>\(\frac{1}{a}\sin(ax) + C\)</td>
+                <td>\(a \neq 0\)</td>
+            </tr>
+        </table>
+    </div>
+
+    <!-- PHẦN 2: TÍCH PHÂN Kép -->
+    <div class="section">
+        <h2>2. Cách Tính Tích Phân Kép</h2>
+
+        <h3>2.1. Khái niệm cơ bản</h3>
+        <p>Tích phân kép của hàm \(f(x, y)\) trên miền \(D\) trong mặt phẳng \(xy\) được ký hiệu:</p>
+        <div class="formula">
+            \[ \iint_{D} f(x, y) \, dx \, dy \quad \text{hoặc} \quad \iint_{D} f(x, y) \, dA \]
+        </div>
+        <pTrong đó:</p>
+        <ul>
+            <li>\(D\): miền kín trong mặt phẳng \(xy\)</li>
+            <li>\(f(x, y)\): hàm dưới dấu tích phân</li>
+            <li>\(dx \, dy\) hoặc \(dA\): yếu tố diện tích</li>
+        </ul>
+
+        <h3>2.2. Các dạng miền tích phân</h3>
+
+        <h4>A. Miền loại I (giới hạn theo \(x\))</h4>
+        <p>Miền \(D\) được xác định bởi:</p>
+        <div class="formula">
+            \[ D = \{(x, y) \mid a \leq x \leq b, \, g_1(x) \leq y \leq g_2(x)\} \]
+        </div>
+        <p>Tích phân kép được tính:</p>
+        <div class="formula">
+            \[ \iint_{D} f(x, y) \, dx \, dy = \int_{a}^{b} \int_{g_1(x)}^{g_2(x)} f(x, y) \, dy \, dx \]
+        </div>
+
+        <h4>B. Miền loại II (giới hạn theo \(y\))</h4>
+        <p>Miền \(D\) được xác định bởi:</p>
+        <div class="formula">
+            \[ D = \{(x, y) \mid c \leq y \leq d, \, h_1(y) \leq x \leq h_2(y)\} \]
+        </div>
+        <p>Tích phân kép được tính:</p>
+        <div class="formula">
+            \[ \iint_{D} f(x, y) \, dx \, dy = \int_{c}^{d} \int_{h_1(y)}^{h_2(y)} f(x, y) \, dx \, dy \]
+        </div>
+
+        <h3>2.3. Các bước tính tích phân kép</h3>
+
+        <div class="step">
+            <span class="step-number">1</span>
+            <strong>Xác định miền tích phân \(D\)</strong>
+            <p>Vẽ miền \(D\) và xác định ranh giới (các đường cong hoặc đường thẳng giới hạn miền)</p>
+        </div>
+
+        <div class="step">
+            <span class="step-number">2</span>
+            <strong>Chọn dạng miền phù hợp</strong>
+            <p>Chọn miền loại I (giới hạn theo \(x\)) hoặc loại II (giới hạn theo \(y\)) tùy theo dạng của miền \(D\)</p>
+        </div>
+
+        <div class="step">
+            <span class="step-number">3</span>
+            <strong>Viết tích phân kép sebagai tích phân lặp</strong>
+            <p>\[ \iint_{D} f(x, y) \, dx \, dy = \int_{a}^{b} \left[ \int_{g_1(x)}^{g_2(x)} f(x, y) \, dy \right] dx \]</p>
+        </div>
+
+        <div class="step">
+            <span class="step-number">4</span>
+            <strong>Tính tích phân bên trong</strong>
+            <p>Tính \(\int_{g_1(x)}^{g_2(x)} f(x, y) \, dy\) coi \(x\) là hằng số</p>
+        </div>
+
+        <div class="step">
+            <span class="step-number">5</span>
+            <strong>Tính tích phân bên ngoài</strong>
+            <p>Thay kết quả từ bước 4 vào và tính \(\int_{a}^{b} (\text{kết quả}) \, dx\)</p>
+        </div>
+
+        <h3>2.4. Tính tích phân kép bằng cách đổi thứ tự  tích phân</h3>
+        <p>Đôi khi việc đổi thứ tự tích phân từ \(dy \, dx\) sang \(dx \, dy\) sẽ đơn giản hóa bài toán:</p>
+        <div class="formula">
+            \[ \int_{a}^{b} \int_{g_1(x)}^{g_2(x)} f(x, y) \, dy \, dx = \int_{c}^{d} \int_{h_1(y)}^{h_2(y)} f(x, y) \, dx \, dy \]
+        </div>
+
+        <h3>2.5. Tích phân kép trong tọa độ cực</h3>
+        <p>Khi miền \(D\) có dạng vòng cung hoặc tròn, nên sử dụng tọa độ cực:</p>
+        <div class="formula">
+            \[ x = r\cos\theta, \quad y = r\sin\theta \]
+        </div>
+        <div class="formula">
+            \[ dx \, dy = r \, dr \, d\theta \]
+        </div>
+        <p>Tích phân kép trong tọa độ cực:</p>
+        <div class="formula">
+            \[ \iint_{D} f(x, y) \, dx \, dy = \iint_{D'} f(r\cos\theta, r\sin\theta) \cdot r \, dr \, d\theta \]
+        </div>
+
+        <h3>2.6. Ví dụ minh họa</h3>
+
+        <div class="example">
+            <p><strong>Ví dụ 1:</strong> Tính \( \iint_{D} xy \, dx \, dy \) với \(D\) là hình chữ nhật \(0 \leq x \leq 1, \, 0 \leq y \leq 2\)</p>
+            
+            <p><strong>Bước 1:</strong> Miền \(D\) là hình chữ nhật, có thể tích theo bất kỳ thứ nguyên nào</p>
+            
+            <p><strong>Bước 2:</strong> Viết tích phân lặp:</p>
+            <p>\[ \iint_{D} xy \, dx \, dy = \int_{0}^{1} \int_{0}^{2} xy \, dy \, dx \]</p>
+            
+            <p><strong>Bước 3:</strong> Tính tích phân bên trong (coi \(x\) là hằng số):</p>
+            <p>\[ \int_{0}^{2} xy \, dy = x \int_{0}^{2} y \, dy = x \cdot \left. \frac{y^2}{2} \right|_{0}^{2} = x \cdot \frac{4}{2} = 2x \]</p>
+            
+            <p><strong>Bước 4:</strong> Tính tích phân bên ngoài:</p>
+            <p>\[ \int_{0}^{1} 2x \, dx = 2 \cdot \left. \frac{x^2}{2} \right|_{0}^{1} = 1^2 - 0^2 = 1 \]</p>
+            
+            <p><strong>Kết quả:</strong> \( \iint_{D} xy \, dx \, dy = 1 \)</p>
+        </div>
+
+        <div class="example">
+            <p><strong>Ví dụ 2:</strong> Tính \( \iint_{D} (x + y) \, dx \, dy \) với \(D\) là miền tam giác giới hạn bởi \(y = 0, \, x = 2, \, y = x\)</p>
+            
+            <p><strong>Bước 1:</strong> Xác định miền \(D\):</p>
+            <p>Vẽ tam giác: đỉnh tại \((0,0), (2,0), (2,2)\)</p>
+            <p>Miền loại I: \(0 \leq x \leq 2, \, 0 \leq y \leq x\)</p>
+            
+            <p><strong>Bước 2:</strong> Viết tích phân lặp:</p>
+            <p>\[ \iint_{D} (x + y) \, dx \, dy = \int_{0}^{2} \int_{0}^{x} (x + y) \, dy \, dx \]</p>
+            
+            <p><strong>Bước 3:</strong> Tính tích phân bên trong:</p>
+            <p>\[ \int_{0}^{x} (x + y) \, dy = \int_{0}^{x} x \, dy + \int_{0}^{x} y \, dy = x \cdot y \left|_{0}^{x} + \frac{y^2}{2} \right|_{0}^{x} \]</p>
+            <p>\[ = x^2 + \frac{x^2}{2} = \frac{3x^2}{2} \]</p>
+            
+            <p><strong>Bước 4:</strong> Tính tích phân bên ngoài:</p>
+            <p>\[ \int_{0}^{2} \frac{3x^2}{2} \, dx = \frac{3}{2} \cdot \left. \frac{x^3}{3} \right|_{0}^{2} = \frac{1}{2} \cdot 8 = 4 \]</p>
+            
+            <p><strong>Kết quả:</strong> \( \iint_{D} (x + y) \, dx \, dy = 4 \)</p>
+        </div>
+
+        <div class="example">
+            <p><strong>Ví dụ 3:</strong> Tính diện tích hình tròn \(x^2 + y^2 \leq R^2\) bằng tích phân kép trong tọa độ cực</p>
+            
+            <p><strong>Bước 1:</strong> Chuyển sang tọa độ cực:</p>
+            <p>\(x^2 + y^2 = r^2 \leq R^2 \Rightarrow 0 \leq r \leq R\)</p>
+            <p>\(0 \leq \theta \leq 2\pi\)</p>
+            
+            <p><strong>Bước 2:</strong> Diện tích được tính bằng:</p>
+            <p>\[ A = \iint_{D} 1 \, dx \, dy = \int_{0}^{2\pi} \int_{0}^{R} r \, dr \, d\theta \]</p>
+            
+            <p><strong>Bước 3:</strong> Tính tích phân:</p>
+            <p>\[ \int_{0}^{R} r \, dr = \left. \frac{r^2}{2} \right|_{0}^{R} = \frac{R^2}{2} \]</p>
+            <p>\[ A = \int_{0}^{2\pi} \frac{R^2}{2} \, d\theta = \frac{R^2}{2} \cdot 2\pi = \pi R^2 \]</p>
+            
+            <p><strong>Kết quả:</strong> Diện tích hình tròn là \( \pi R^2 \)</p>
+        </div>
+
+        <div class="example">
+            <p><strong>Ví dụ 4:</strong> Tính \( \iint_{D} e^{x^2+y^2} \, dx \, dy \) với \(D\) là hình tròn \(x^2 + y^2 \leq 1\)</p>
+            
+            <p><strong>Bước 1:</strong> Sử dụng tọa độ cực vì miền là hình tròn:</p>
+            <p>\(x^2 + y^2 = r^2\), \(0 \leq r \leq 1\), \(0 \leq \theta \leq 2\pi\)</p>
+            
+            <p><strong>Bước 2:</strong> Viết tích phân:</p>
+            <p>\[ \iint_{D} e^{x^2+y^2} \, dx \, dy = \int_{0}^{2\pi} \int_{0}^{1} e^{r^2} \cdot r \, dr \, d\theta \]</p>
+            
+            <p><strong>Bước 3:</strong> Tính tích phân bên trong (đổi biến \(u = r^2\), \(du = 2r \, dr\)):</p>
+            <p>\[ \int_{0}^{1} r e^{r^2} \, dr = \frac{1}{2} \int_{0}^{1} e^{u} \, du = \frac{1}{2} \cdot \left. e^u \right|_{0}^{1} = \frac{1}{2}(e - 1) \]</p>
+            
+            <p><strong>Bước 4:</strong> Tính tích phân bên ngoài:</p>
+            <p>\[ \int_{0}^{2\pi} \frac{1}{2}(e - 1) \, d\theta = \frac{1}{2}(e - 1) \cdot 2\pi = \pi(e - 1) \]</p>
+            
+            <p><strong>Kết quả:</strong> \( \iint_{D} e^{x^2+y^2} \, dx \, dy = \pi(e - 1) \)</p>
+        </div>
+    </div>
+
+    <!-- PHẦN 3: LƯU Ý -->
+    <div class="section">
+        <h3>2.7. Lưu ý quan trọng</h3>
+        <div class="note">
+            <ul>
+                <li>Khi tính tích phân lặp, tích phân bên trong được tính trước, coi biến của tích phân bên ngoài là hằng số</li>
+                <li>Nên vẽ miền tích phân để xác định đúng ranh giới và chọn dạng miền phù hợp</li>
+                <li>Đối với miền đối xứng hoặc có dạng tròn, hình vành khăn, nên sử dụng tọa độ cực</li>
+                <li>Có thể đổi thứ nguyên tích phân nếu việc tính toán đơn giản hóa</li>
+                <li>Tích phân kép có thể dùng để tính: diện tích miền, thể tích khối, khối lượng, tâm khối, mô men</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- PHẦN 4: TÓM TẮT -->
+    <div class="section">
+        <h2>Tóm tắt</h2>
+        <table border="1" cellpadding="10" style="border-collapse: collapse; width: 100%;">
+            <tr style="background-color: #3498db; color: white;">
+                <th>Loại tích phân</th>
+                <th>Ký hiệu</th>
+                <th>Công thức chính</th>
+            </tr>
+            <tr>
+                <td>Nguyên hàm cơ bản</td>
+                <td>\( \int x^n \, dx \)</td>
+                <td>\( \frac{x^{n+1}}{n+1} + C \) (\(n \neq -1\))</td>
+            </tr>
+            <tr>
+                <td>Tích phân kép (miền loại I)</td>
+                <td>\( \iint_{D} f(x,y) \, dx \, dy \)</td>
+                <td>\( \int_{a}^{b} \int_{g_1(x)}^{g_2(x)} f(x,y) \, dy \, dx \)</td>
+            </tr>
+            <tr>
+                <td>Tích phân kép (miền loại II)</td>
+                <td>\( \iint_{D} f(x,y) \, dx \, dy \)</td>
+                <td>\( \int_{c}^{d} \int_{h_1(y)}^{h_2(y)} f(x,y) \, dx \, dy \)</td>
+            </tr>
+            <tr>
+                <td>Tích phân kép (tọa độ cực)</td>
+                <td>\( \iint_{D} f(x,y) \, dx \, dy \)</td>
+                <td>\( \iint_{D'} f(r\cos\theta, r\sin\theta) \cdot r \, dr \, d\theta \)</td>
+            </tr>
+        </table>
+    </div>
+
+    <p style="text-align: center; margin-top: 30px; color: #7f8c8d;">
+        <em>Tài liệu này được biên soạn cho mục đích học tập GT3 và phần biến ngẫu nhiên nhiều chiều môn xác suất thống kê</em>
+    </p>
+</body>
+</html>

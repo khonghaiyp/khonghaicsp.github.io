@@ -1,0 +1,730 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <title>Mục lục học phần XSTK</title>
+
+  <!-- MathJax để hiển thị công thức toán -->
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script id="MathJax-script" async
+          src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+  <style>
+    body {
+      font-family: "Segoe UI", Arial, sans-serif;
+      background-color: #f8f9fa;
+      color: #222;
+      margin: 40px;
+      line-height: 1.6;
+    }
+    h1 {
+      text-align: center;
+      color: #003366;
+    }
+    h2 {
+      color: #0055aa;
+      margin-top: 40px;
+    }
+    button {
+      background-color: #0055aa;
+      color: white;
+      border: none;
+      padding: 10px 18px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 16px;
+      transition: 0.2s;
+    }
+    button:hover {
+      background-color: #003f7f;
+    }
+    .section-content {
+      display: none;
+      background: #fff;
+      border-radius: 10px;
+      padding: 20px;
+      margin-top: 15px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    .author {
+      text-align: right;
+      font-style: italic;
+      margin-top: 30px;
+    }
+  </style>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  <style>
+    body{font-family:system-ui, -apple-system, "Segoe UI", Roboto, Arial; background:#f7f7fb; padding:20px}
+    .card{background:white;border-radius:12px;padding:18px;box-shadow:0 6px 18px rgba(0,0,0,0.06);max-width:900px;margin:0 auto}
+    label{margin-right:6px}
+    input[type=number]{width:80px;padding:4px;margin-right:10px}
+    button{padding:6px 12px;border:0;background:#2563eb;color:white;border-radius:8px;cursor:pointer}
+    button:active{transform:translateY(1px)}
+  </style>
+<!--  Dai so chuong 2 -->
+    <style>
+    :root{--bg:#fff;--ink:#222;--muted:#555;--card:#f7fafc;--accent:#0b6ef6;--border:#e5e7eb;--callout:#fff7e6}
+    html,body{margin:0;padding:0;background:var(--bg);color:var(--ink);font:16px/1.6 system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif}
+    main{max-width:1000px;margin:32px auto;padding:0 16px}
+    h1{font-size:28px;margin:0 0 8px}
+    h2{font-size:20px;margin:24px 0 8px;color:var(--muted)}
+    .grid{display:grid;grid-template-columns:1fr;gap:16px}
+    @media (min-width:960px){ .grid{grid-template-columns:1fr 1fr} }
+    .card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:16px}
+    .card.header{background:#eef6ff}
+    .def-title{font-weight:700;margin-bottom:6px}
+    .tag{display:inline-block;font-weight:600;color:#fff;background:var(--accent);border-radius:999px;padding:2px 10px;margin-right:8px}
+    .callout{background:var(--callout);border:1px solid #ffe7bf}
+    .bullets{margin:8px 0 0 18px}
+    .bullets li{margin:4px 0}
+    .flex{display:flex;gap:16px;flex-wrap:wrap}
+    .w-50{flex:1 1 220px}
+    .center{text-align:center}
+    .ex-mats{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px}
+  </style>
+  <script>
+    window.MathJax = { tex: {inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]']]}, svg:{fontCache:'global'} };
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" defer></script> 
+</head>
+<body>
+
+  <h1>📚 CHƯƠNG II: MA TRẬN </h1>
+  <p class="author">
+    Biên soạn: <strong>Ts. Khổng Văn Hải</strong><br>
+    Khoa Toán - Tin, Đại học Bách Khoa Hà Nội
+  </p>
+ 
+  <hr>
+
+  <!-- Phần I -->
+  <h2>I. Ma trận và các phép toán</h2>
+  <!-- <button onclick="toggleSection('theory')">📘 Xem / Ẩn phần lý thuyết</button> -->
+
+  <!-- <div id="theory" class="section-content"> -->
+
+  <h2>1  Khái niệm</h2>
+
+  <section class="card header">
+    <div class="def-title"><span class="tag"> <strong> Định nghĩa 1 </strong> </span></div>
+    <p>Một ma trận cỡ \(m\times n\) là một bảng hình chữ nhật gồm \(m\) hàng, \(n\) cột dạng: \[
+    A=\begin{pmatrix}
+      a_{11} & a_{12} & \cdots & a_{1n}\\
+      a_{21} & a_{22} & \cdots & a_{2n}\\
+      \vdots & \vdots & \ddots & \vdots\\
+      a_{m1} & a_{m2} & \cdots & a_{mn}
+    \end{pmatrix}
+    \] với \(a_{ij}\in\mathbb{K}\). Kí hiệu \(A=[a_{ij}]_{m\times n}\) để chỉ ma trận \(m\) hàng, \(n\) cột với các phần tử \(a_{ij}\). </p>
+    <ul class="bullets">
+      <li>Ma trận \(1\times n\) là ma trận hàng; \(n\times 1\) là ma trận cột. [web:6]</li>
+      <li>Ma trận không \( \mathbf{0} \) nếu \(a_{ij}=0\) với mọi \(i,j\). [web:6]</li>
+      <li>Nếu \(m=n\) thì \(A\) là ma trận vuông cấp \(n\). [web:6]</li>
+    </ul>
+  </section>
+
+  <div class="grid">
+    <section class="card">
+      <div class="def-title"><span class="tag">Ví dụ 1</span></div>
+      <p>\(
+        A=\begin{pmatrix}1\\4\\7\end{pmatrix}
+      \) là ma trận cột; \(
+        B=\begin{pmatrix}1&2&3&4\end{pmatrix}
+      \) là ma trận hàng; \(
+        C=\begin{pmatrix}1&2&3\\4&5&6\\7&8&9\end{pmatrix}
+      \) là ma trận vuông cấp \(3\). [web:5]</p>
+    </section>
+
+    <section class="card">
+      <div class="def-title"><span class="tag">Định nghĩa 2</span> Ma trận vuông cấp \(n\)</div>
+      <p>Các phần tử \(a_{11},a_{22},\ldots,a_{nn}\) là phần tử trên đường chéo chính của \(A\). [web:5]</p>
+      <ul class="bullets">
+        <li>Nếu \(a_{ij}=0\) khi \(i\ne j\) thì \(A\) là ma trận chéo. [web:5]</li>
+        <li>Nếu \(a_{ij}=0\) khi \(i<j\) là tam giác dưới; khi \(i>j\) là tam giác trên. [web:5]</li>
+        <li>\(A\) đối xứng nếu \(A^{\mathsf T}=A\); phản đối xứng nếu \(A^{\mathsf T}=-A\) và khi đó \(a_{ii}=0\). [web:5]</li>
+      </ul>
+    </section>
+  </div>
+
+  <section class="card callout">
+    <ul class="bullets">
+      <li>Nếu \(A\) là ma trận đường chéo với tất cả phần tử chéo chính bằng \(1\) thì \(A\) là ma trận đơn vị \(I_n\). [web:5]</li>
+    </ul>
+  </section>
+
+  <div class="grid">
+    <section class="card">
+      <div class="def-title"><span class="tag">Ví dụ 2</span></div>
+      <div class="ex-mats">
+        <div><p>\(A=\begin{pmatrix}1&2&3\\4&5&6\\7&8&9\end{pmatrix}\) có phần tử chéo \(1,5,9\). [web:5]</p></div>
+        <div><p>\(B=\begin{pmatrix}1&0&0\\5&1&0\\4&3&1\end{pmatrix}\) là tam giác dưới. [web:5]</p></div>
+        <div><p>\(C=\begin{pmatrix}0&-5&0\\0&0&0\\0&0&3\end{pmatrix}\) là ma trận chéo. [web:5]</p></div>
+        <div><p>\(I_2=\begin{pmatrix}1&0\\0&1\end{pmatrix}\), \(I_3=\begin{pmatrix}1&0&0\\0&1&0\\0&0&1\end{pmatrix}\). [web:5]</p></div>
+      </div>
+    </section>
+
+    <section class="card">
+      <div class="def-title"><span class="tag">Định nghĩa 3</span> Ma trận chuyển vị</div>
+      <p>Với \(A=[a_{ij}]_{m\times n}\), đặt \(A^{\mathsf T}=[b_{ij}]_{n\times m}\) với \(b_{ij}=a_{ji}\); tức là đổi hàng thành cột và ngược lại. [web:11]</p>
+      <div class="flex">
+        <div class="w-50 center"><p>\(A=\begin{pmatrix}1&2&3\\4&5&6\\1&4&9\end{pmatrix}\)</p></div>
+        <div class="w-50 center"><p>\(A^{\mathsf T}=\begin{pmatrix}1&4&1\\2&5&4\\3&6&9\end{pmatrix}\)</p></div>
+      </div>
+    </section>
+  </div>
+
+  <section class="card">
+    <div class="def-title"><span class="tag">Định nghĩa 4</span> Đối xứng và phản đối xứng</div>
+    <ul class="bullets">
+      <li>\(A\) đối xứng khi \(A^{\mathsf T}=A\). [web:5]</li>
+      <li>\(A\) phản đối xứng khi \(A^{\mathsf T}=-A\). [web:5]</li>
+      <li>Nếu \(A\) phản đối xứng thì \(a_{ii}=0\). [web:5]</li>
+    </ul>
+  </section>
+
+  <hr>
+
+    <section class="card">
+    <div class="def-title"><span class="tag">Ví dụ 4</span> Ma trận đối xứng và phản xứng</div>
+    <div class="ex-cols">
+      <p>\(A=\begin{pmatrix}1&2&-1\\2&-2&3\\-1&3&3\end{pmatrix}\) là ma trận đối xứng; 
+      \(B=\begin{pmatrix}0&2&-1\\-2&0&3\\1&-3&0\end{pmatrix}\) là ma trận phản xứng. </p>
+    </div>
+  </section>
+
+  <h2>2  Hai ma trận bằng nhau</h2>
+  <section class="card header">
+    <div class="def-title"><span class="tag">Định nghĩa 5</span></div>
+    <p>Hai ma trận \(A\) và \(B\) gọi là bằng nhau nếu chúng có cùng cỡ và các phần tử tương ứng của chúng bằng nhau. </p>
+  </section>
+
+  <section class="card">
+    <div class="def-title"><span class="tag">Ví dụ 5</span></div>
+    <div class="ex-cols">
+      <p>\(A=\begin{pmatrix}1&2&3\\2&1&5\\3&4&6\end{pmatrix}\) và 
+         \(B=\begin{pmatrix}2&1&5\\3&4&6\\1&2&3\end{pmatrix}\) không bằng nhau vì không cùng cỡ. </p>
+      <p>Hai ma trận \(A=\begin{pmatrix}1&5&4\\-1&3&2\end{pmatrix}\) và 
+         \(B=\begin{pmatrix}1&5&4\\-1&3&2\end{pmatrix}\) là hai ma trận bằng nhau. </p>
+    </div>
+  </section>
+
+<h2>3  Các phép toán trên ma trận</h2>
+  <h3>3.1  Phép cộng</h3>
+
+  <section class="card header">
+    <div class="def-title"><span class="tag">Định nghĩa 6</span></div>
+    <p>Cho hai ma trận cùng cỡ \(A=[a_{ij}]_{m\times n}\) và \(B=[b_{ij}]_{m\times n}\). Tổng \(A+B\) là ma trận cỡ \(m\times n\) xác định bởi \(A+B=[a_{ij}+b_{ij}]_{m\times n}\). </p>
+    <p class="mono">Như vậy, cộng hai ma trận cùng cỡ là cộng các phần tử tương ứng của chúng với nhau.</p>
+  </section>
+
+  <section class="card">
+    <div class="def-title"><span class="tag">Ví dụ 6</span></div>
+    <p>\(
+    \begin{pmatrix}1&2&3\\4&5&0\\-3&1&4\end{pmatrix} +
+    \begin{pmatrix}2&0&1\\-1&2&0\\4&4&3\end{pmatrix} +
+    \begin{pmatrix}1&2&-1\\2&1&3\\0&1&3\end{pmatrix}
+    =
+    \begin{pmatrix}3&1&3\\5&6&1\\1&6&10\end{pmatrix}
+    \) </p>
+  </section>
+
+  <section class="card">
+    <div class="def-title"><span class="tag">Định nghĩa 7</span></div>
+    <ul class="bullets">
+      <li>Ma trận đối của ma trận \(A=[a_{ij}]_{m\times n}\) kí hiệu là \(-A\), xác định bởi \(-A=[-a_{ij}]_{m\times n}\). </li>
+      <li>Hiệu của hai ma trận cùng cỡ \(A\) và \(B\), kí hiệu \(A-B\), xác định bởi \(A-B=A+(-B)\). </li>
+    </ul>
+  </section>
+
+  <section class="card callout">
+    <div class="def-title"><span class="tag">Lưu ý 1</span> Tính chất đại số của \((M_{m\times n}(\mathbb{K}),+)\)</div>
+    <ul class="bullets">
+      <li>Tính kết hợp: \((A+B)+C=A+(B+C)\). </li>
+      <li>Tính giao hoán: \(A+B=B+A\). </li>
+      <li>Tồn tại phần tử trung hoà: \(A+\mathbf{0}=A\) với \(\mathbf{0}\) là ma trận không, cùng cỡ với \(A\). </li>
+      <li>Tồn tại phần tử đối: \(A+(-A)=(-A)+A=\mathbf{0}\). </li>
+    </ul>
+  </section>
+
+  <h3>3.2  Phép nhân</h3>
+
+  <section class="card header">
+    <div class="def-title"><span class="tag">Định nghĩa 8</span> Nhân ma trận với số</div>
+    <p>Cho ma trận \(A=[a_{ij}]_{m\times n}\) trên trường \(\mathbb{K}\) và số \(k\in\mathbb{K}\). Tích \(kA=[ka_{ij}]_{m\times n}\), nghĩa là nhân số \(k\) vào mỗi phần tử của \(A\). </p>
+  </section>
+
+  <section class="card">
+    <div class="def-title"><span class="tag">Ví dụ 7</span></div>
+    <p>Tích của \(3\) và ma trận \(A=\begin{pmatrix}1&2&3\\4&-5&6\end{pmatrix}\) là
+    \[
+      3A=\begin{pmatrix}3\cdot1&3\cdot2&3\cdot3\\3\cdot4&3\cdot(-5)&3\cdot6\end{pmatrix}
+      =\begin{pmatrix}3&6&9\\12&-15&18\end{pmatrix}.
+    \] </p>
+  </section>
+
+  <section class="card callout">
+    <div class="def-title"><span class="tag">Công thức 1</span> Quy tắc đại số với số vô hướng</div>
+    <ol class="bullets" style="list-style:decimal;margin-left:22px">
+      <li>\((kA+B)=kA+kB\). </li>
+      <li>\((k+l)A=kA+lA\). </li>
+      <li>\(k(lA)=(kl)A\). </li>
+      <li>\(1A=A,\;(-1)A=-A\). </li>
+      <li>\(0A=\mathbf{0}\). </li>
+      <li>\(k\mathbf{0}=\mathbf{0}\). </li>
+    </ol>
+  </section>
+
+  <section class="card header">
+    <div class="def-title"><span class="tag">Định nghĩa 9</span> Tích hai ma trận</div>
+    <p>Giả sử \(A=[a_{ik}]_{m\times p}\) và \(B=[b_{kj}]_{p\times n}\) là các ma trận cỡ \(m\times p\) và \(p\times n\) tương ứng. Tích \(C=AB=[c_{ij}]_{m\times n}\) có \(c_{ij}\;(1\le i\le m,\;1\le j\le n)\) xác định bởi công thức
+    \[
+      c_{ij}=a_{i1}b_{1j}+a_{i2}b_{2j}+\cdots+a_{ip}b_{pj}=\sum_{k=1}^{p} a_{ik}b_{kj}.
+    \]
+    </p>
+  </section>
+
+  <section class="card">
+    <div class="def-title"><span class="tag">Ví dụ 8</span></div>
+    <p>\(
+      A=\begin{pmatrix}2&3&4\\1&0&0\end{pmatrix},\qquad
+      B=\begin{pmatrix}0&1000\\1&100\\0&10\end{pmatrix}.
+    \)</p>
+    <p>Phần tử \(C_{12}\) của ma trận tích \(AB\) là tích vô hướng hàng thứ nhất của \(A\) với cột thứ hai của \(B\):
+    \[
+       C_{12}=\sum_{k=1}^{3} A_{1k}B_{k2}=\begin{pmatrix}2&3&4\end{pmatrix}
+       \begin{pmatrix}1000\\100\\10\end{pmatrix}
+       =2\cdot1000+3\cdot100+4\cdot10=2340.
+    \]
+    </p>
+  </section>
+
+  <h2>4  Một số phép biến đổi sơ cấp trên ma trận</h2>
+
+  <section class="card header">
+    <div class="def-title"><span class="tag">Định nghĩa 10</span></div>
+    <p>Cho ma trận \(A\). Các phép biến đổi sau gọi là các phép biến đổi sơ cấp: </p>
+    <ol class="bullets" style="list-style:decimal;margin-left:22px">
+      <li>Đổi chỗ hai hàng (hay hai cột) cho nhau. </li>
+      <li>Nhân một hàng (hay một cột) với một số khác \(0\). </li>
+      <li>Cộng vào một hàng (tương ứng một cột) một bội của hàng (tương ứng một cột) khác. </li>
+    </ol>
+    <p class="mono">Kí hiệu: \(h_i\) để chỉ hàng \(i\); \(c_j\) để chỉ cột \(j\).\</p>
+    <ul class="bullets">
+      <li>\(h_i\leftrightarrow h_j\) (tương ứng \(c_i\leftrightarrow c_j\)): đổi chỗ hai hàng \(i,j\) (tương ứng hai cột \(i,j\)) cho nhau. </li>
+      <li>\(\lambda h_i\) (tương ứng \(\lambda c_j\)): nhân số \(\lambda\) với hàng \(i\) (tương ứng cột \(j\)). </li>
+      <li>\(h_k+\lambda h_i\to h_k\) (tương ứng \(c_k+\lambda c_i\to c_k\)): nhân hàng \(i\) (tương ứng cột \(i\)) với \(\lambda\) rồi cộng vào hàng \(k\) (tương ứng cột \(k\)). </li>
+    </ul>
+  </section>
+
+  <section class="card">
+    <div class="def-title"><span class="tag">Ví dụ 9</span></div>
+    <p>Thực hiện lần lượt các phép biến đổi sơ cấp trên ma trận ban đầu: </p>
+    <p class="center">
+      \(
+      \begin{pmatrix}4&5&6\\1&2&3\\7&8&9\end{pmatrix}
+      \xrightarrow{\,h_1\leftrightarrow h_2\,}
+      \begin{pmatrix}1&2&3\\4&5&6\\7&8&9\end{pmatrix}
+      \xrightarrow{\,2h_3\,}
+      \begin{pmatrix}1&2&3\\4&5&6\\14&16&18\end{pmatrix}
+      \)
+    </p>
+    <p class="center">
+      \(
+      \begin{pmatrix}1&2&3\\4&5&6\\14&16&18\end{pmatrix}
+      \xrightarrow{\,h_2+(-4)h_1\to h_2\,}
+      \begin{pmatrix}1&2&3\\0&-3&-6\\14&16&18\end{pmatrix}
+      \xrightarrow{\,h_3+(-14)h_1\to h_3\,}
+      \begin{pmatrix}1&2&3\\0&-3&-6\\0&-12&-24\end{pmatrix}
+      \)
+    </p>
+  </section>
+
+  <hr>
+
+  <h2>II  Định thức</h2>
+  <h3>1  Khái niệm</h3>
+
+  <section class="card header">
+    <div class="def-title"><span class="tag">Định nghĩa 11</span> Ma trận vuông cấp \(n\)</div>
+    <p>Kí hiệu \(A=[a_{ij}]_{n\times n}\). Ma trận con cấp \(n-1\) có được từ \(A\) bằng cách bỏ đi hàng \(i\) (\(i=1,\ldots,n\)) và cột \(j\) (\(j=1,\ldots,n\)) được gọi là ma trận con ứng với phần tử \(a_{ij}\), kí hiệu \(M_{ij}\). </p>
+    <p class="center">
+      \(
+      A=\begin{pmatrix}
+      a_{11}&a_{12}&\cdots&a_{1n}\\
+      a_{21}&a_{22}&\cdots&a_{2n}\\
+      \vdots&\vdots&\ddots&\vdots\\
+      a_{n1}&a_{n2}&\cdots&a_{nn}
+      \end{pmatrix}
+      \)
+    </p>
+  </section>
+
+  <section class="card">
+    <div class="def-title"><span class="tag">Ví dụ 10</span></div>
+    <p>Với \(A=\begin{pmatrix}
+      a_{11}&a_{12}&a_{13}\\
+      a_{21}&a_{22}&a_{23}\\
+      a_{31}&a_{32}&a_{33}
+      \end{pmatrix}\),
+      một số ma trận con tương ứng: </p>
+    <div class="ex-grid">
+      <p>\(M_{11}=\begin{pmatrix}a_{22}&a_{23}\\a_{32}&a_{33}\end{pmatrix}\).</p>
+      <p>\(M_{12}=\begin{pmatrix}a_{21}&a_{23}\\a_{31}&a_{33}\end{pmatrix}\).</p>
+      <p>\(M_{13}=\begin{pmatrix}a_{21}&a_{22}\\a_{31}&a_{32}\end{pmatrix}\).</p>
+      <p>\(M_{21}=\begin{pmatrix}a_{12}&a_{13}\\a_{32}&a_{33}\end{pmatrix}\).</p>
+      <p>\(M_{23}=\begin{pmatrix}a_{11}&a_{12}\\a_{31}&a_{32}\end{pmatrix}\).</p>
+    </div>
+  </section>
+
+  <section class="card header">
+    <div class="def-title"><span class="tag">Định nghĩa 12</span> Định thức cấp \(n\) (quy nạp)</div>
+    <ul class="bullets">
+      <li>Nếu \(A\) là ma trận vuông cấp \(1\): \(A=[a_{11}]\) thì \(\det(A)=a_{11}\). </li>
+      <li>Nếu \(A\) là ma trận vuông cấp \(2\): \(A=\begin{pmatrix}a_{11}&a_{12}\\a_{21}&a_{22}\end{pmatrix}\) thì
+        \(\det(A)=a_{11}\det(M_{11})-a_{12}\det(M_{12})=a_{11}a_{22}-a_{12}a_{21}\). </li>
+    </ul>
+  </section>
+
+  <section class="card header">
+    <div class="def-title"><span class="tag">Định thức cấp 3 và tổng quát</span></div>
+    <p>Nếu \(A=\begin{pmatrix}a_{11}&a_{12}&a_{13}\\a_{21}&a_{22}&a_{23}\\a_{31}&a_{32}&a_{33}\end{pmatrix}\) thì
+    \[
+      \det(A)=a_{11}\det(M_{11})-a_{12}\det(M_{12})+a_{13}\det(M_{13})
+    \]
+    với \(M_{ij}\) là ma trận con bậc \(2\) bỏ hàng \(i\), cột \(j\). </p>
+    <p>Tổng quát cho \(A=[a_{ij}]_{n\times n}\):
+    \[
+      \det(A)=a_{11}\det(M_{11})-a_{12}\det(M_{12})+a_{13}\det(M_{13})+\cdots+(-1)^{1+n}a_{1n}\det(M_{1n}).
+    \]
+    </p>
+  </section>
+
+  <section class="card callout">
+    <div class="def-title"><span class="tag">Ví dụ 11</span> Tính định thức</div>
+    <p>Với \(A=\begin{pmatrix}1&-3\\5&7\end{pmatrix}\) ta có
+      \(\det(A)=1\cdot7-(-3)\cdot5=22\). </p>
+  </section>
+
+  <h2>2  Công thức khai triển</h2>
+
+  <section class="card header">
+    <div class="def-title"><span class="tag">Định nghĩa 13</span> Phần bù đại số</div>
+    <p>Cho ma trận vuông cấp \(n\): \(A=[a_{ij}]_{n\times n}\). Với mỗi cặp \((i,j)\), \(1\le i,j\le n\), kí hiệu \(M_{ij}\) là ma trận con cấp \(n-1\) thu được từ \(A\) bằng cách bỏ đi hàng \(i\) và cột \(j\). Khi đó đặt
+    \[
+      A_{ij}=(-1)^{i+j}\det(M_{ij})
+    \]
+    và gọi \(A_{ij}\) là phần bù đại số của \(a_{ij}\). </p>
+  </section>
+
+  <section class="card">
+    <div class="def-title"><span class="tag">Công thức 2</span> Khai triển Laplace</div>
+    <ul class="bullets">
+      <li>Theo hàng \(i\) cố định: \(\det(A)=a_{i1}A_{i1}+a_{i2}A_{i2}+\cdots+a_{in}A_{in}\). </li>
+      <li>Theo cột \(j\) cố định: \(\det(A)=a_{1j}A_{1j}+a_{2j}A_{2j}+\cdots+a_{nj}A_{nj}\). </li>
+    </ul>
+    <p class="mono">Lưu ý: nên chọn hàng hoặc cột có nhiều số \(0\) để khai triển để giảm bớt số định thức con phải tính. </p>
+  </section>
+
+  <section class="card">
+    <div class="def-title"><span class="tag">Ví dụ 12</span></div>
+    <p>Cho \(A=\begin{pmatrix}1&2&3\\2&-1&0\\4&5&-3\end{pmatrix}\).
+    Tính các phần bù đại số:
+    \[
+      A_{21}=(-1)^{2+1}\begin{vmatrix}2&3\\5&-3\end{vmatrix}
+      =-(2\cdot(-3)-3\cdot5)=21,
+    \]
+    \[
+      A_{22}=(-1)^{2+2}\begin{vmatrix}1&3\\4&-3\end{vmatrix}
+      =(1\cdot(-3)-3\cdot4)=-15,
+    \]
+    \[
+      A_{23}=(-1)^{2+3}\begin{vmatrix}1&2\\4&5\end{vmatrix}
+      =-(1\cdot5-2\cdot4)=3.
+    \]
+    Do đó \(\det(A)=21\cdot2+(-15)\cdot(-1)+3\cdot0=57\). </p>
+  </section>
+
+  <h2>3  Một số tính chất của định thức</h2>
+
+  <section class="card header">
+    <div class="def-title"><span class="tag">Tính chất 1</span> Chuyển vị</div>
+    <p>\(\det(A^{\mathsf T})=\det(A)\). Hệ quả: trong định thức, vai trò hàng và cột là như nhau; mệnh đề đúng cho hàng thì đúng cho cột và ngược lại. </p>
+  </section>
+
+  <section class="card">
+    <div class="def-title"><span class="tag">Tính chất 2</span> Đổi chỗ hai hàng/cột</div>
+    <p>Nếu đổi chỗ hai hàng (hoặc hai cột) trong một định thức thì định thức đổi dấu. </p>
+    <div class="ex-grid">
+      <p>Chẳng hạn:
+      \(
+      \begin{vmatrix}
+        2&3&-97\\
+        0&-1&5\\
+        4&5&-3
+      \end{vmatrix}
+      =-
+      \begin{vmatrix}
+        -1&1&0\\
+        2&3&-97\\
+        4&5&-3
+      \end{vmatrix}
+      \).
+      </p>
+    </div>
+    <ul class="bullets">
+      <li>Nếu định thức có hai hàng (hoặc hai cột) như nhau thì bằng \(0\). </li>
+      <li>Nếu một hàng (hoặc một cột) có thừa số \(0\) thì bằng \(0\). </li>
+      <li>Nếu định thức có hai hàng (hoặc hai cột) tỉ lệ thì bằng \(0\). </li>
+    </ul>
+  </section>
+
+  <section class="card callout">
+    <div class="def-title"><span class="tag">Tính chất 3</span> Nhân một hàng/cột với số</div>
+    <p>Nếu nhân tất cả phần tử trên một hàng hoặc một cột của ma trận \(A\) với một số \(k\) thì
+    \(\det(kA)=k^n\det(A)\) với \(A\) cấp \(n\). Hệ quả: nếu chỉ nhân một hàng (hoặc một cột) với \(k\) thì định thức được nhân bởi \(k\). </p>
+  </section>  
+  <section class="card header">
+    <div class="def-title"><span class="tag">Tính chất 4</span></div>
+    <p>Nếu ma trận \(A\) có hai hàng (hay hai cột) tỉ lệ thì \(\det(A)=0\). </p>
+  </section>
+
+  <section class="card">
+    <div class="def-title"><span class="tag">Tính chất 5</span></div>
+    <ul class="bullets">
+      <li>Một định thức có \(2\) hàng (hoặc \(2\) cột) như nhau thì bằng \(0\). </li>
+      <li>Một định thức có \(1\) hàng (hoặc \(1\) cột) toàn số \(0\) thì bằng \(0\). </li>
+      <li>Một định thức có \(2\) hàng (hoặc \(2\) cột) tỉ lệ thì bằng \(0\). </li>
+    </ul>
+  </section>
+
+  <section class="card header">
+    <div class="def-title"><span class="tag">Tính chất 6</span></div>
+    <p>Nếu định thức có \(1\) hàng là tổ hợp tuyến tính của các hàng khác (hoặc \(1\) cột là tổ hợp tuyến tính của các cột khác) thì định thức ấy bằng \(0\). </p>
+  </section>
+
+  <section class="card callout">
+    <div class="def-title"><span class="tag">Ví dụ 13</span></div>
+    <p>Cho \(A=\begin{pmatrix}1&2&7\\-3&1&3\\2&-5&1\end{pmatrix}\). Vì \(h_1=2h_2+h_3\) nên \(\det(A)=0\). </p>
+    <p>Nói \(h_1\) là tổ hợp tuyến tính của \(h_2\) và \(h_3\). Ma trận \(B=\begin{pmatrix}2&0&1\\3&-1&2\\1&1&0\end{pmatrix}\) có \(\det(B)=0\) vì \(c_2=c_1-2c_3\) (tức \(c_2\) là tổ hợp tuyến tính của \(c_1\) và \(c_3\)). </p>
+  </section>
+
+  <section class="card">
+    <div class="def-title"><span class="tag">Tính chất 7</span> Cộng tuyến tính trên hàng/cột</div>
+    <p>Nếu tách một hàng \(i\) (hoặc một cột) của định thức thành tổng của hai hàng thì định thức tách thành tổng hai định thức. Chẳng hạn
+    \[
+      \begin{vmatrix}
+        a_{11} & a_{12}\\
+        a_{21} & a_{22}
+      \end{vmatrix}
+      =
+      \begin{vmatrix}
+        a_{11} & d_{12}+e_{12}\\
+        a_{21} & a_{22}
+      \end{vmatrix}
+      =
+      \begin{vmatrix}
+        a_{11} & d_{12}\\
+        a_{21} & a_{22}
+      \end{vmatrix}
+      +
+      \begin{vmatrix}
+        a_{11} & e_{12}\\
+        a_{21} & a_{22}
+      \end{vmatrix}.
+    \]
+    </p>
+  </section>
+
+  <section class="card header">
+    <div class="def-title"><span class="tag">Tính chất 8</span> Cộng bội hàng/cột vào hàng/cột khác</div>
+    <p>Khi cộng bội \(k\) của \(1\) hàng vào \(1\) hàng khác (hoặc cộng bội \(k\) của \(1\) cột vào \(1\) cột khác) thì giá trị định thức không đổi. </p>
+  </section>
+
+  <section class="card">
+    <div class="def-title"><span class="tag">Tính chất 9</span> Định thức tích ma trận tam giác – chéo</div>
+    <p>Nếu \(A\) là tam giác (hay chéo) thì \(\det(A)\) bằng tích các phần tử trên đường chéo chính. Hệ quả: \(\det(I)=1\). </p>
+  </section>
+
+  <section class="card">
+    <div class="def-title"><span class="tag">Tính chất 10</span> Tính nhân với tích ma trận</div>
+    <p>Với mọi ma trận vuông cùng cỡ \(A\) và \(B\), ta có \(\det(AB)=\det(A)\det(B)\). </p>
+  </section>
+
+  <h3>Lưu ý 3. Tính định thức bằng biến đổi sơ cấp</h3>
+  <section class="card callout">
+    <p><span class="tag">Bước 1</span> Áp dụng các phép biến đổi sơ cấp để đưa định thức về dạng tam giác. </p> <br> 
+    <p><span class="tag">Bước 2</span> Tính định thức dạng tam giác thu được (dựa vào tính chất 9). </p>
+  </section>
+
+  <section class="card">
+    <div class="def-title"><span class="tag">Ví dụ 14</span></div>
+    <p>Cho
+      \(D=\begin{vmatrix}
+        2&3&-97&-1\\
+        1&-1&0&1\\
+        4&5&-3&0\\
+        0&2&-52&1
+      \end{vmatrix}\).
+      Biến đổi sơ cấp và tính được \(D=(-1)\cdot1\cdot(-66)\cdot(-30)=-1980\). </p>
+  </section>
+
+  <section class="card">
+    <div class="def-title"><span class="tag">Lưu ý 4</span> Kết hợp biến đổi và khai triển</div>
+    <p>Khi tính định thức, kết hợp biến đổi sơ cấp với khai triển Laplace giúp giảm công tính. Ví dụ trên có thể viết lại để khai triển theo cột có nhiều \(0\) nhằm rút gọn phép tính, kết quả vẫn \(D=-1980\). </p>
+  </section>
+
+  <h2>4  Kết hợp khai triển và biến đổi sơ cấp để tính định thức</h2>
+
+  <section class="card header">
+    <div class="def-title"><span class="tag">Định nghĩa 14</span> Phép biến đổi sơ cấp</div>
+    <ul class="bullets">
+      <li>Nhân tất cả các phần tử của \(1\) hàng (hoặc \(1\) cột) với cùng \(1\) số \(k\ne0\), kí hiệu \(k.h_r\) (\(k.c_r\to c_r\)). </li>
+      <li>Đổi vị trí \(2\) hàng cho nhau, kí hiệu \(h_r\leftrightarrow h_s\) (\(c_r\leftrightarrow c_s\)). </li>
+      <li>Cộng k lần \(1\) hàng vào \(1\) hàng khác, kí hiệu \(h_s+k\,h_r\to h_s\) (\(c_s+k\,c_r\to c_s\)). </li>
+    </ul>
+  </section>  
+
+  <h2>III  Ma trận nghịch đảo</h2>
+
+  <h3>1  Định nghĩa và tính chất</h3>
+
+  <section class="card header">
+    <div class="def-title"><span class="tag">Định nghĩa 15</span></div>
+    <p>Với \(n\in\mathbb{N}^\ast\), \(M_n(\mathbb{K})\) là tập các ma trận cấp \(n\) trên trường \(\mathbb{K}\) và \(I\) là ma trận đơn vị cấp \(n\). Ma trận \(A\in M_n(\mathbb{K})\) gọi là ma trận khả nghịch nếu tồn tại \(B\in M_n(\mathbb{K})\) sao cho \(AB=BA=I\). Khi đó, \(B\) gọi là ma trận nghịch đảo của \(A\), kí hiệu \(B=A^{-1}\). </p>
+    <p>Nếu \(A^{-1}\) tồn tại thì \(A^{-1}A=A A^{-1}=I\) và duy nhất; kí hiệu \(GL_n(\mathbb{K})\) là tập hợp các ma trận khả nghịch cấp \(n\). </p>
+  </section>
+
+  <section class="card">
+    <div class="def-title"><span class="tag">Ví dụ 15</span></div>
+    <p>Nếu \(A=\begin{pmatrix}1&2\\2&1\end{pmatrix}\) là ma trận khả nghịch với ma trận nghịch đảo \(A^{-1}=\begin{pmatrix}3&-2\\-1&1\end{pmatrix}\). </p>
+  </section>
+
+  <section class="card">
+    <div class="def-title"><span class="tag">Định lý 1</span> Tính chất của nghịch đảo</div>
+    <ul class="bullets">
+      <li>Ma trận đơn vị \(I\) khả nghịch và \(I^{-1}=I\). </li>
+      <li>Nếu \(A\in GL_n(\mathbb{K})\) thì \(A^{-1}\in GL_n(\mathbb{K})\) và \((A^{-1})^{-1}=A\). </li>
+      <li>Nếu \(A,B\in GL_n(\mathbb{K})\) thì \((AB)^{-1}=B^{-1}A^{-1}\). </li>
+      <li>Nếu \(k\in\mathbb{K}\setminus\{0\}\) và \(A\in GL_n(\mathbb{K})\) thì \((kA)^{-1}=k^{-1}A^{-1}\). </li>
+    </ul>
+    <p class="mono">Lưu ý 5: Để chứng minh \(X\) là nghịch đảo của \(Y\), chỉ cần chỉ ra \(XY=I\) và \(YX=I\). </p>
+  </section>
+
+  <h3>2  Điều kiện cần và đủ để ma trận khả nghịch</h3>
+
+  <section class="card header">
+    <div class="def-title"><span class="tag">Định nghĩa 16</span></div>
+    <p>Ma trận \(A\in M_n(\mathbb{K})\) gọi là ma trận không suy biến nếu \(\det(A)\ne0\). </p>
+    <div class="def-title" style="margin-top:8px"><span class="tag">Định lý 2</span></div>
+    <p>Ma trận \(A\in M_n(\mathbb{K})\) khả nghịch khi và chỉ khi \(A\) không suy biến. </p>
+    <div class="def-title" style="margin-top:8px"><span class="tag">Tính chất 11</span></div>
+    <p>\(A\in M_n(\mathbb{K})\) khả nghịch khi và chỉ khi tồn tại \(B\) sao cho \(AB=I\) hoặc \(BA=I\). </p>
+  </section>
+
+  <h3>3  Tìm ma trận nghịch đảo bằng phần phụ đại số</h3>
+
+  <section class="card">
+    <div class="def-title"><span class="tag">Công thức</span></div>
+    <p>Bước 1: Tính ma trận phụ đại số \(A_{ij}\)     </p>
+    <p>Bước 2: Xác định ma trận phụ đại số \(A^\#=[A_{ij}]\). </p>
+    <p> Bước 3: Lập ma trận \(C=A^\#\). Công thức:
+    \[
+      A^{-1}=\frac{1}{\det(A)}\,C^{\mathsf T}.
+    \]
+    </p>
+  </section>
+
+  <section class="card callout">
+    <div class="def-title"><span class="tag">Ví dụ 16</span></div>
+    <p>Với \(A=\begin{pmatrix}1&1&1\\1&2&-1\\2&3&1\end{pmatrix}\) có \(\det(A)=1\), nên \(A\) khả nghịch. Lập ma trận phụ đại số thu được
+    \(
+      \tilde A=\begin{pmatrix}5&-3&-1\\2&-1&-1\\-3&2&1\end{pmatrix}
+    \),
+    do đó \(A^{-1}=\dfrac{\tilde A^{\mathsf T}}{\det(A)}=\begin{pmatrix}5&2&-3\\-3&-1&2\\-1&-1&1\end{pmatrix}\). </p>
+  </section>
+
+  <h3>4  Tìm ma trận nghịch đảo bằng cách giải phương trình ma trận</h3>
+
+  <section class="card header">
+    <div class="def-title"><span class="tag">Tính chất 12</span></div>
+    <p>Xét phương trình ma trận \(AX=I\) với \(I\) là đơn vị; nếu \(A\) khả nghịch thì nghiệm duy nhất là \(X=A^{-1}\). </p>
+  </section>
+
+  <section class="card">
+    <div class="def-title"><span class="tag">Ví dụ 17</span></div>
+    <p>Cho \(A=\begin{pmatrix}1&2\\3&4\end{pmatrix}\) với \(\det(A)=-2\ne0\). Đặt
+      \(A^{-1}=\begin{pmatrix}a&b\\c&d\end{pmatrix}\). Từ \(AA^{-1}=I\) suy ra hệ
+    \[
+      \begin{cases}
+        a+2c=1,\quad b+2d=0,\\
+        3a+4c=0,\quad 3b+4d=1,
+      \end{cases}
+    \]
+    giải ra \(A^{-1}=\dfrac{1}{-2}\begin{pmatrix}4&-2\\-3&1\end{pmatrix}=\begin{pmatrix}-2&1\\\tfrac{3}{2}&-\tfrac{1}{2}\end{pmatrix}\). </p>
+  </section>  
+
+<!-- </div>     -->
+
+
+
+<h2>II. Các phân phối đặc biệt </h2> 
+<button onclick="toggleSection('ppdacbiet')">📘 Xem / Ẩn phần lý thuyết</button>
+
+<div id="ppdacbiet" class="section-content">
+
+</div>
+
+
+
+
+
+
+  <!-- Phần II -->
+  <h2>III. Bài tập rèn luyện</h2>
+  <ul>
+    <li> <button onclick="btbnnroirac()">Bài tập biến ngẫu nhiên rời rạc</button>
+      <script>
+        function toggleSection(id) {
+          const section = document.getElementById(id);
+          section.style.display = (section.style.display === "none" || section.style.display === "") ? "block" : "none";
+        }
+
+        function btbnnroirac() {
+          window.open("C2BNNRR_BT.html", "_blank");
+        //   window.open("Contents/XSTK/C2BT.html", "_self");
+        }
+      </script>
+    </li>
+    <li>
+      <button onclick="btbnnlientuc()">Bài tập biến ngẫu nhiên liên tục</button>
+      <script>
+        function btbnnlientuc() {
+          window.open("C2BNNLT_BT.html", "_self");
+        }
+      </script> 
+    </li>
+    <li> 
+      <button onclick="ppthongdung()">Bài tập: Một số phân phối xác suất thông dung</button>
+      <script>
+        function ppthongdung() {
+          window.open("C2PPThongDung.html", "_self");
+        }
+      </script> 
+    </li>
+  </ul>
+  
+
+
+
+
+<script>
+  function backToHome() {
+    window.open("../../index.html", "_self");
+  }
+</script>
+
+<button onclick="backToHome()">⬅ Quay lại Trang chính</button>
+
+
+
+</body>
+</html>

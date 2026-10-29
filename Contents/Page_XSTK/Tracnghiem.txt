@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bài Tập Trắc Nghiệm Có Hẹn Giờ</title>
+    <style>
+        :root {
+            --primary-color: #4a90e2;
+            --success-color: #2ecc71;
+            --danger-color: #e74c3c;
+            --bg-color: #f5f7fa;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            width: 100%;
+            max-width: 700px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-top: 0;
+        }
+
+        /* Khu vực điều khiển & Thời gian */
+        .quiz-controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #eef2f7;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 25px;
+        }
+
+        #timer {
+            font-size: 1.4rem;
+            font-weight: bold;
+            color: var(--danger-color);
+        }
+
+        /* Câu hỏi */
+        .quiz-section {
+            display: none; /* Ẩn bài tập khi chưa bấm bắt đầu */
+        }
+
+        .question {
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .question p {
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+
+        .options label {
+            display: block;
+            padding: 10px 15px;
+            background: #f8f9fa;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            margin-bottom: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .options label:hover {
+            background: #e9ecef;
+        }
+
+        .options input[type="radio"] {
+            margin-right: 10px;
+        }
+
+        /* Nút bấm */
+        button {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            font-size: 1rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+            width: 100%;
+            transition: background 0.2s;
+        }
+
+        button:hover {
+            background-color: #357abd;
+        }
+
+        #submit-btn {
+            background-color: var(--success-color);
+            margin-top: 15px;
+        }
+
+        #submit-btn:hover {
+            background-color: #27ae60;
+        }
+
+        /* Kết quả */
+        #result {
+            display: none;
+            text-align: center;
+            margin-top: 25px;
+            padding: 20px;
+            background: #e8f8f5;
+            border-radius: 8px;
+            border: 1px solid var(--success-color);
+        }
+
+        #result h2 {
+            color: #117a65;
+            margin-top: 0;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Bài Kiểm Tra Trắc Nghiệm</h1>
+
+    <div class="quiz-controls">
+        <button id="start-btn" onclick="startQuiz()">Bấm vào đây để BẮT ĐẦU</button>
+        <div id="timer" style="display: none;">Thời gian: 00:30</div>
+    </div>
+
+    <div id="quiz-section" class="quiz-section">
+        <form id="quiz-form">
+            
+            <div class="question">
+                <p>Câu 1: Thủ đô của Việt Nam là gì?</p>
+                <div class="options">
+                    <label><input type="radio" name="q1" value="A"> A. TP. Hồ Chí Minh</label>
+                    <label><input type="radio" name="q1" value="B"> B. Đà Nẵng</label>
+                    <label><input type="radio" name="q1" value="C"> C. Hà Nội</label>
+                    <label><input type="radio" name="q1" value="D"> D. Huế</label>
+                </div>
+            </div>
+
+            <div class="question">
+                <p>Câu 2: Số nào sau đây là số nguyên tố?</p>
+                <div class="options">
+                    <label><input type="radio" name="q2" value="A"> A. 4</label>
+                    <label><input type="radio" name="q2" value="B"> B. 7</label>
+                    <label><input type="radio" name="q2" value="C"> C. 9</label>
+                    <label><input type="radio" name="q2" value="D"> D. 15</label>
+                </div>
+            </div>
+
+            <div class="question">
+                <p>Câu 3: HTML là viết tắt của cụm từ nào?</p>
+                <div class="options">
+                    <label><input type="radio" name="q3" value="A"> A. Hyper Text Markup Language</label>
+                    <label><input type="radio" name="q3" value="B"> B. High Text Machine Language</label>
+                    <label><input type="radio" name="q3" value="C"> C. Hyperlink and Text Management</label>
+                    <label><input type="radio" name="q3" value="D"> D. Cả 3 đều sai</label>
+                </div>
+            </div>
+
+            <button type="button" id="submit-btn" onclick="submitQuiz(false)">Nộp Bài</button>
+        </form>
+    </div>
+
+    <div id="result">
+        <h2>Kết Quả Của Bạn</h2>
+        <p id="score-text" style="font-size: 1.2rem; font-weight: bold;"></p>
+        <p id="time-status" style="color: #666;"></p>
+    </div>
+</div>
+
+<script>
+    // Cấu hình đáp án đúng và thời gian làm bài (tính bằng giây)
+    const correctAnswers = {
+        q1: "C",
+        q2: "B",
+        q3: "A"
+    };
+    let timeLeft = 30; // 30 giây làm bài
+    let timerInterval;
+    let isQuizFinished = false;
+
+    // Hàm bắt đầu làm bài
+    function startQuiz() {
+        document.getElementById('start-btn').style.display = 'none'; // Ẩn nút bắt đầu
+        document.getElementById('timer').style.display = 'block';   // Hiện đồng hồ
+        document.getElementById('quiz-section').style.display = 'block'; // Hiện câu hỏi
+
+        // Cập nhật đồng hồ hiển thị ban đầu
+        updateTimerDisplay();
+
+        // Chạy đếm ngược mỗi 1 giây
+        timerInterval = setInterval(function() {
+            timeLeft--;
+            updateTimerDisplay();
+
+            if (timeLeft <= 0) {
+                clearInterval(timerInterval);
+                submitQuiz(true); // Tự động nộp bài khi hết giờ (truyền tham số true)
+            }
+        }, 1000);
+    }
+
+    // Hàm cập nhật hiển thị thời gian định dạng mm:ss
+    function updateTimerDisplay() {
+        let minutes = Math.floor(timeLeft / 60);
+        let seconds = timeLeft % 60;
+        
+        // Thêm số 0 phía trước nếu số có 1 chữ số
+        minutes = minutes < 10 ? '0' + minutes : minutes;
+        seconds = seconds < 10 ? '0' + seconds : seconds;
+
+        document.getElementById('timer').textContent = `Thời gian: ${minutes}:${seconds}`;
+    }
+
+    // Hàm nộp bài và tính điểm
+    function submitQuiz(isTimeout = false) {
+        if (isQuizFinished) return; // Nếu đã nộp rồi thì không xử lý lại
+        isQuizFinished = true;
+
+        // Dừng đồng hồ đếm ngược
+        clearInterval(timerInterval);
+
+        // Vô hiệu hóa (khóa) tất cả các ô chọn để người dùng không sửa được nữa
+        const inputs = document.querySelectorAll('input[type="radio"]');
+        inputs.forEach(input => input.disabled = true);
+        document.getElementById('submit-btn').disabled = true;
+
+        // Tính điểm
+        let score = 0;
+        const totalQuestions = Object.keys(correctAnswers).length;
+        const formData = new FormData(document.getElementById('quiz-form'));
+
+        for (let key in correctAnswers) {
+            if (formData.get(key) === correctAnswers[key]) {
+                score++;
+            }
+        }
+
+        // Hiển thị kết quả công bố điểm
+        document.getElementById('score-text').textContent = `Số câu đúng: ${score}/${totalQuestions} (Đạt ${(score/totalQuestions*10).toFixed(1)} điểm)`;
+        
+        if (isTimeout) {
+            document.getElementById('time-status').textContent = "Bài tập đã tự động ngắt vì HẾT GIỜ!";
+            document.getElementById('time-status').style.color = "red";
+        } else {
+            document.getElementById('time-status').textContent = "Bạn đã hoàn thành bài tập chủ động.";
+            document.getElementById('time-status').style.color = "green";
+        }
+
+        document.getElementById('result').style.display = 'block';
+        
+        // Cuộn màn hình xuống vùng kết quả để người dùng dễ thấy
+        document.getElementById('result').scrollIntoView({ behavior: 'smooth' });
+    }
+</script>
+
+</body>
+</html>

@@ -1,0 +1,5 @@
+ThacmacV3;V4: Hoàn thiện: 
+	Yêu cầu: Mỗi sinh viên yêu cầu, cần chỉ cho trong 1 thư mục nào đó, khi nào cần thì show ra hết. 
+ThacmacV5: Đáp ứng được yêu cầu V3,V4 chưa làm được. 
+Phiên bản hiện tại
+	ThacmacV5:

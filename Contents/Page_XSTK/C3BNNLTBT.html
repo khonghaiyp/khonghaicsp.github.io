@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bài Tập Trắc Nghiệm Công Thức Bayes</title>
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body);"></script>
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']],
+                processEscapes: true
+            }
+        };
+    </script>
+    <script id="MathJax-script" async
+          src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+    </script>
+    <style>
+        :root {
+            --primary-color: #2b6cb0;
+            --success-color: #38a169;
+            --error-color: #e53e3e;
+            --bg-color: #f7fafc;
+            --card-bg: #ffffff;
+            --text-color: #2d3748;
+        }
+        .author {
+        text-align: right;
+        font-style: italic;
+        margin-top: 30px;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 20px;
+            background: var(--card-bg);
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        }
+
+        header h1 {
+            color: var(--primary-color);
+            margin-bottom: 10px;
+        }
+
+        header h1 i {
+            margin-right: 10px;
+        }
+
+        .quiz-card {
+            background: var(--card-bg);
+            padding: 25px;
+            border-radius: 8px;
+            margin-bottom: 25px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            transition: transform 0.2s;
+        }
+
+        .question-title {
+            font-size: 1.15rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: #1a202c;
+        }
+
+        .options-container {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .option-label {
+            display: flex;
+            align-items: center;
+            padding: 12px 15px;
+            border: 2px solid #e2e8f0;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .option-label:hover {
+            background-color: #edf2f7;
+            border-color: #cbd5e0;
+        }
+
+        .option-label input {
+            margin-right: 12px;
+            transform: scale(1.2);
+        }
+
+        /* Lớp định dạng khi kiểm tra kết quả */
+        .option-label.correct {
+            background-color: #c6f6d5 !important;
+            border-color: var(--success-color) !important;
+            color: #22543d;
+            font-weight: 600;
+        }
+
+        .option-label.incorrect {
+            background-color: #fed7d7 !important;
+            border-color: var(--error-color) !important;
+            color: #742a2a;
+        }
+
+        .rationale {
+            margin-top: 12px;
+            padding: 10px 15px;
+            background-color: #ebf8ff;
+            border-left: 4px solid #3182ce;
+            border-radius: 4px;
+            font-size: 0.95rem;
+            display: none;
+        }
+
+        .hint-btn {
+            background: none;
+            border: none;
+            color: var(--primary-color);
+            cursor: pointer;
+            font-size: 0.9rem;
+            margin-top: 10px;
+            padding: 0;
+            text-decoration: underline;
+        }
+        .hint-text {
+            display: none;
+            font-size: 0.9rem;
+            color: #718096;
+            font-style: italic;
+            margin-top: 5px;
+        }
+
+        #submit-btn {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 4px 6px rgba(43, 108, 176, 0.3);
+            transition: background 0.2s;
+        }
+
+        #submit-btn:hover {
+            background-color: #2b6cb0;
+        }
+
+        #result-box {
+            display: none;
+            text-align: center;
+            padding: 25px;
+            background: #e6fffa;
+            border: 2px solid #319795;
+            border-radius: 8px;
+            margin-top: 30px;
+            font-size: 1.3rem;
+            color: #234e52;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+
+<div class="container">
+    <header>
+        <h1><i class="fas fa-diagram-project"></i>3.1 Biến ngẫu nhiên nhiều chiều. <br> Biến ngẫu nhiên rời rạc </h1>
+        <p class="author">
+            Biên soạn: <strong>Ts. Khổng Văn Hải</strong><br>
+            Khoa Toán - Tin, Đại học Bách Khoa Hà Nội
+        </p>
+    </header>
+
+    
+
+    <form id="quiz-form">
+        <div class="quiz-card" data-q="1">
+            <div class="question-title">Câu 1: Một hệ thống phát hiện gian lận thẻ tín dụng gắn cờ cảnh báo đối với $98\%$ giao dịch gian lận thật sự và $1\%$ giao dịch hợp pháp (dương tính giả). Biết rằng tỷ lệ giao dịch gian lận thực tế trong hệ thống chỉ chiếm $0.5\%$. Nếu một giao dịch bất kỳ bị hệ thống gắn cờ cảnh báo, xác suất để giao dịch đó thực sự là gian lận là bao nhiêu?</div>
+            <div class="options-container">
+                <label class="option-label"><input type="radio" name="q1" value="A"> 33.00%</label>
+                <label class="option-label"><input type="radio" name="q1" value="B"> 98.00%</label>
+                <label class="option-label"><input type="radio" name="q1" value="C"> 0.50%</label>
+                <label class="option-label"><input type="radio" name="q1" value="D"> 1.49%</label>
+            </div>
+            <!-- <button type="button" class="hint-btn" onclick="toggleHint(1)">Gợi ý</button>
+            <div class="hint-text" id="hint-1">Xác định rõ hai giả thuyết: giao dịch gian lận và giao dịch hợp pháp, sau đó tính tổng xác suất hệ thống phát cảnh báo.</div>
+            <div class="rationale" id="rat-1"><b>Giải thích:</b> Áp dụng công thức Bayes: $P(G|C) = \frac{0.005 \times 0.98}{0.005 \times 0.98 + 0.995 \times 0.01} = \frac{0.0049}{0.01485} \approx 33.00\%$.</div> -->
+        </div>
+
+        <div class="quiz-card" data-q="q1">
+            <strong>Câu 01.</strong>
+            <div class="q-text">
+                Cho biến ngẫu nhiên hai chiều liên tục $(X,Y)$ có hàm mật độ xác suất đồng thời:
+                $$f(x,y) = \begin{cases} k(x + 2y) & \text{với } 0 \le x \le 1, 0 \le y \le 1 \\ 0 & \text{với các trường hợp khác} \end{cases}$$
+                Giá trị của hằng số $k$ phải bằng bao nhiêu?
+            </div>
+            <div class="choices">
+                <label><input type="checkbox" name="q1" value="A"> A. $k = \frac{2}{3}$</label>
+                <label><input type="checkbox" name="q1" value="B"> B. $k = 1$</label>
+                <label><input type="checkbox" name="q1" value="C"> C. $k = \frac{1}{2}$</label>
+                <label><input type="checkbox" name="q1" value="D"> D. $k = \frac{3}{2}$</label>
+                <label><input type="checkbox" name="q1" value="E"> E. $k = 2$</label>
+            </div>
+        </div>
+
+        <button type="submit" id="submit-btn">Nộp Bài & Kiểm Tra Kết Quả</button>
+    </form>
+
+    <div id="result-box"></div>
+</div>
+
+<script>
+    // Đáp án chuẩn của 10 câu (A, B, C, D)
+    const correctAnswers = {
+        q1: 'A', q2: 'A', q3: 'A', q4: 'A', q5: 'A',
+        q6: 'A', q7: 'A', q8: 'A', q9: 'A', q10: 'A'
+    };
+
+    // Ẩn/Hiện gợi ý câu hỏi
+    function toggleHint(qId) {
+        const hint = document.getElementById(`hint-${qId}`);
+        hint.style.display = (hint.style.display === 'block') ? 'none' : 'block';
+    }
+
+    // Xử lý nộp bài
+    document.getElementById('quiz-form').addEventListener('submit', function(e) {
+        e.preventDefault();
+        let score = 0;
+        const totalQuestions = Object.keys(correctAnswers).length;
+
+        for (let key in correctAnswers) {
+            const questionCard = document.querySelector(`.quiz-card[data-q="${key.replace('q','')}"]`);
+            const selectedOption = document.querySelector(`input[name="${key}"]:checked`);
+            const allLabels = questionCard.querySelectorAll('.option-label');
+            const rationaleBox = questionCard.querySelector('.rationale');
+
+            // Reset định dạng cũ
+            allLabels.forEach(label => {
+                label.classList.remove('correct', 'incorrect');
+            });
+
+            // Hiện phần lời giải chi tiết
+            if(rationaleBox) rationaleBox.style.display = 'block';
+
+            // Tô màu đáp án đúng (Luôn luôn hiển thị đáp án đúng sau khi nộp)
+            allLabels.forEach(label => {
+                if (label.querySelector('input').value === correctAnswers[key]) {
+                    label.classList.add('correct');
+                }
+            });
+
+            // Kiểm tra câu trả lời của người dùng
+            if (selectedOption) {
+                if (selectedOption.value === correctAnswers[key]) {
+                    score++;
+                } else {
+                    // Nếu trả lời sai thì tô đỏ đáp án đã chọn
+                    selectedOption.parentElement.classList.add('incorrect');
+                }
+            }
+        }
+
+        // Hiển thị tổng điểm số công khai phía cuối trang
+        const resultBox = document.getElementById('result-box');
+        resultBox.innerHTML = `Kết quả của bạn: ${score}/${totalQuestions} câu chính xác (${((score/totalQuestions)*100).toFixed(1)}%)`;
+        resultBox.style.display = 'block';
+        
+        // Cuộn màn hình xuống kết quả
+        resultBox.scrollIntoView({ behavior: 'smooth' });
+    });
+</script>
+
+</body>
+</html>

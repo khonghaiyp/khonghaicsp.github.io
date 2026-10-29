@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <title>Ví dụ Môi trường Theorem trong Slide HTML</title>
+  
+  <!-- Nhúng KaTeX để hiển thị công thức toán mượt và đẹp -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"
+          onload="renderMathInElement(document.body);"></script>
+
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background-color: #0f172a;
+      color: #f8fafc;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      margin: 0;
+    }
+
+    /* Khung Slide */
+    .slide {
+      width: 800px;
+      background: #1e293b;
+      border-radius: 12px;
+      padding: 32px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+    }
+
+    /* ----------------------------------------------------
+       HỆ THỐNG MÔI TRƯỜNG THEOREM (CSS THEOREM ENVIRONMENT)
+       ---------------------------------------------------- */
+    
+    /* Thiết lập bộ đếm tự động cho từng loại */
+    body {
+      counter-reset: definition-counter theorem-counter lemma-counter;
+    }
+
+    .math-block {
+      margin: 20px 0;
+      padding: 16px 20px;
+      border-left: 5px solid;
+      border-radius: 0 8px 8px 0;
+      background-color: #334155;
+    }
+
+    .math-block .title {
+      font-weight: bold;
+      margin-bottom: 8px;
+      display: block;
+    }
+
+    /* 1. Định nghĩa (Definition) */
+    .definition {
+      border-left-color: #3b82f6; /* Xanh dương */
+      background-color: rgba(59, 130, 246, 0.1);
+    }
+    .definition .title::before {
+      counter-increment: definition-counter;
+      content: "Định nghĩa " counter(definition-counter) ". ";
+      color: #60a5fa;
+    }
+
+    /* 2. Định lý (Theorem) */
+    .theorem {
+      border-left-color: #10b981; /* Xanh lá */
+      background-color: rgba(16, 185, 129, 0.1);
+    }
+    .theorem .title::before {
+      counter-increment: theorem-counter;
+      content: "Định lý " counter(theorem-counter) ". ";
+      color: #34d399;
+    }
+
+    /* 3. Bổ đề / Hệ quả (Lemma / Corollary) */
+    .lemma {
+      border-left-color: #f59e0b; /* Cam */
+      background-color: rgba(245, 158, 11, 0.1);
+    }
+    .lemma .title::before {
+      counter-increment: lemma-counter;
+      content: "Bổ đề " counter(lemma-counter) ". ";
+      color: #fbbf24;
+    }
+
+    /* 4. Chứng minh (Proof) */
+    .proof {
+      border-left: 2px solid #94a3b8;
+      background-color: rgba(148, 163, 184, 0.05);
+      font-style: italic;
+    }
+    .proof .title {
+      font-style: normal;
+      color: #cbd5e1;
+    }
+    .proof .title::before {
+      content: "Chứng minh. ";
+    }
+    /* Ký hiệu Q.E.D kết thúc chứng minh (hình vuông nhỏ) */
+    .proof::after {
+      content: "■";
+      float: right;
+      font-style: normal;
+      color: #94a3b8;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="slide">
+    <h2>Ví dụ Môi trường Toán học</h2>
+
+    <!-- Môi trường Định nghĩa -->
+    <div class="math-block definition">
+      <span class="title">(Biến ngẫu nhiên liên tục)</span>
+      Biến ngẫu nhiên $X$ được gọi là liên tục nếu tồn tại hàm số $f(x) \ge 0$ sao cho với mọi $a \le b$, ta có:
+      $$P(a \le X \le b) = \int_{a}^{b} f(x) dx$$
+    </div>
+
+    <!-- Môi trường Định lý -->
+    <div class="math-block theorem">
+      <span class="title">(Tính chất của Kỳ vọng)</span>
+      Cho $X$ và $Y$ là hai biến ngẫu nhiên có kỳ vọng hữu hạn, khi đó với mọi số thực $a, b \in \mathbb{R}$:
+      $$E[aX + bY] = aE[X] + bE[Y]$$
+    </div>
+
+    <!-- Môi trường Chứng minh -->
+    <div class="math-block proof">
+      Theo tính chất tuyến tính của tích phân/tổng xác suất, ta có tích phân của tổng bằng tổng các tích phân. Từ đó suy ra điều phải chứng minh.
+    </div>
+  </div>
+
+</body>
+</html>

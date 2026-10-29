@@ -1,0 +1,662 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HTML ↔ LaTeX Question Converter</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Fira+Code:wght@400;500;600&display=swap" rel="stylesheet">
+    
+    <!-- MathJax 3 Configuration & Script -->
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']],
+                processEscapes: true
+            },
+            options: {
+                skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+            }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .code-font {
+            font-family: 'Fira Code', monospace;
+            tab-size: 4;
+        }
+        /* Custom scrollbar */
+        textarea::-webkit-scrollbar, div::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        textarea::-webkit-scrollbar-track, div::-webkit-scrollbar-track {
+            background: #f1f5f9;
+            border-radius: 4px;
+        }
+        textarea::-webkit-scrollbar-thumb, div::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+        textarea::-webkit-scrollbar-thumb:hover, div::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+
+        /* Badge Styles for Preview */
+        .badge-ez { background-color: #dcfce7; color: #166534; font-size: 0.75rem; font-weight: 600; padding: 2px 8px; border-radius: 9999px; margin-left: 8px; display: inline-block; }
+        .badge-med { background-color: #e0f2fe; color: #075985; font-size: 0.75rem; font-weight: 600; padding: 2px 8px; border-radius: 9999px; margin-left: 8px; display: inline-block; }
+        .badge-hard { background-color: #ffedd5; color: #9a3412; font-size: 0.75rem; font-weight: 600; padding: 2px 8px; border-radius: 9999px; margin-left: 8px; display: inline-block; }
+        .badge-vhard { background-color: #ffe4e6; color: #9f1239; font-size: 0.75rem; font-weight: 600; padding: 2px 8px; border-radius: 9999px; margin-left: 8px; display: inline-block; }
+    </style>
+</head>
+<body class="bg-slate-100 text-slate-800 min-h-screen flex flex-col">
+
+    <!-- Header -->
+    <header class="bg-white border-b border-slate-200 sticky top-0 z-30 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3.5 flex flex-col sm:flex-row items-center justify-between gap-3">
+            <div class="flex items-center space-x-3">
+                <div class="p-2.5 bg-indigo-600 text-white rounded-xl shadow-md shadow-indigo-200">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"/>
+                    </svg>
+                </div>
+                <div>
+                    <h1 class="text-xl font-bold text-slate-900 leading-tight">HTML ↔ LaTeX Question Converter</h1>
+                    <p class="text-xs text-slate-500">Chuyển đổi 2 chiều định dạng câu hỏi & bảng đáp án checkAnswers()</p>
+                </div>
+            </div>
+
+            <!-- Global Action Bar -->
+            <div class="flex flex-wrap items-center gap-2">
+                <button onclick="loadSampleData()" class="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold rounded-lg border border-slate-300 transition-all active:scale-95 flex items-center">
+                    <svg class="w-3.5 h-3.5 mr-1 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+                    Dữ liệu mẫu
+                </button>
+                <button onclick="swapPanels()" class="px-3 py-1.5 bg-amber-50 hover:bg-amber-100 text-amber-700 text-xs font-semibold rounded-lg border border-amber-200 transition-all active:scale-95 flex items-center">
+                    <svg class="w-3.5 h-3.5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4"/></svg>
+                    Đổi bên
+                </button>
+                <button onclick="clearAll()" class="px-3 py-1.5 bg-rose-50 hover:bg-rose-100 text-rose-700 text-xs font-semibold rounded-lg border border-rose-200 transition-all active:scale-95 flex items-center">
+                    <svg class="w-3.5 h-3.5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+                    Xóa sạch
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 flex-grow w-full flex flex-col gap-6">
+        
+        <!-- Rules Banner -->
+        <div class="bg-indigo-50 border border-indigo-100 rounded-2xl p-4 text-xs text-indigo-900 flex flex-col md:flex-row gap-3 items-start md:items-center justify-between">
+            <div class="flex items-start space-x-2">
+                <span class="inline-block p-1 bg-indigo-200 text-indigo-700 rounded-md mt-0.5">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                </span>
+                <div>
+                    <strong class="font-semibold text-indigo-950">Quy tắc tự động:</strong> 
+                    Đọc/Tạo khối <code class="bg-white px-1 py-0.5 rounded border border-indigo-200 font-mono text-indigo-700">correctAnswers</code> ở khối script cuối HTML | 
+                    Chuyển <code class="bg-white px-1 py-0.5 rounded border border-indigo-200 font-mono text-indigo-700">&lt;strong&gt;</code> ↔ <code class="bg-white px-1 py-0.5 rounded border border-indigo-200 font-mono text-indigo-700">\textbf{}</code> | 
+                    Tự loại bỏ thẻ độ khó <code class="bg-white px-1 py-0.5 rounded border border-indigo-200 font-mono text-indigo-700">&lt;span class="badge-*"&gt;</code> & tiền tố <code class="bg-white px-1 py-0.5 rounded border border-indigo-200 font-mono text-indigo-700">Câu X.</code> khi sang LaTeX.
+                </div>
+            </div>
+        </div>
+
+        <!-- Conversion Editors -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 flex-grow">
+            
+            <!-- HTML Panel -->
+            <div class="bg-white rounded-2xl shadow-sm border border-slate-200 flex flex-col overflow-hidden h-[540px]">
+                <div class="px-5 py-3.5 border-b border-slate-200 bg-slate-50 flex justify-between items-center">
+                    <div class="flex items-center space-x-2">
+                        <span class="w-3 h-3 rounded-full bg-orange-500"></span>
+                        <h2 class="font-bold text-sm text-slate-800">HTML Code</h2>
+                        <span id="html-count" class="text-xs text-slate-400 font-mono">0 chars</span>
+                    </div>
+                    <div class="flex items-center space-x-2">
+                        <button onclick="copyText('html-input')" class="p-1.5 text-slate-500 hover:text-slate-800 hover:bg-slate-200 rounded-lg transition-colors" title="Sao chép HTML">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
+                        </button>
+                        <button onclick="convertHtmlToLatex()" class="px-3 py-1.5 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-semibold rounded-lg shadow-sm transition-all active:scale-95 flex items-center">
+                            Chuyển sang LaTeX ➔
+                        </button>
+                    </div>
+                </div>
+                <div class="flex-grow relative p-3 bg-slate-900">
+                    <textarea id="html-input" oninput="updateCharCount('html-input', 'html-count')" class="w-full h-full p-3 bg-transparent text-slate-100 code-font text-xs resize-none outline-none border-0 leading-relaxed" spellcheck="false" placeholder="Dán mã HTML kèm khối script checkAnswers vào đây..."></textarea>
+                </div>
+            </div>
+
+            <!-- LaTeX Panel -->
+            <div class="bg-white rounded-2xl shadow-sm border border-slate-200 flex flex-col overflow-hidden h-[540px]">
+                <div class="px-5 py-3.5 border-b border-slate-200 bg-slate-50 flex justify-between items-center">
+                    <div class="flex items-center space-x-2">
+                        <button onclick="convertLatexToHtml()" class="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold rounded-lg shadow-sm transition-all active:scale-95 flex items-center">
+                            ➔ Chuyển sang HTML
+                        </button>
+                    </div>
+                    <div class="flex items-center space-x-2">
+                        <span id="latex-count" class="text-xs text-slate-400 font-mono">0 chars</span>
+                        <h2 class="font-bold text-sm text-slate-800">LaTeX Code</h2>
+                        <span class="w-3 h-3 rounded-full bg-emerald-500"></span>
+                        <button onclick="copyText('latex-input')" class="p-1.5 text-slate-500 hover:text-slate-800 hover:bg-slate-200 rounded-lg transition-colors" title="Sao chép LaTeX">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
+                        </button>
+                    </div>
+                </div>
+                <div class="flex-grow relative p-3 bg-slate-900">
+                    <textarea id="latex-input" oninput="updateCharCount('latex-input', 'latex-count')" class="w-full h-full p-3 bg-transparent text-slate-100 code-font text-xs resize-none outline-none border-0 leading-relaxed" spellcheck="false" placeholder="Dán mã LaTeX \begin{question}... vào đây..."></textarea>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- MathJax Live Preview -->
+        <section class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+            <div class="px-5 py-3.5 border-b border-slate-200 bg-slate-50 flex flex-wrap items-center justify-between gap-2">
+                <div class="flex items-center space-x-2">
+                    <svg class="w-5 h-5 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
+                    <h3 class="font-bold text-sm text-slate-800">Visual Live Preview (MathJax Rendered)</h3>
+                </div>
+                <div class="flex items-center space-x-2">
+                    <button onclick="renderPreview('html')" class="px-3 py-1 bg-slate-200 hover:bg-slate-300 text-slate-700 text-xs font-medium rounded-md transition-colors">Xem Preview HTML</button>
+                    <button onclick="renderPreview('latex')" class="px-3 py-1 bg-slate-200 hover:bg-slate-300 text-slate-700 text-xs font-medium rounded-md transition-colors">Xem Preview LaTeX</button>
+                </div>
+            </div>
+            <div id="preview-box" class="p-6 bg-slate-50 min-h-[160px] text-slate-800 text-sm leading-relaxed overflow-x-auto">
+                <p class="text-slate-400 italic text-center py-6">Thực hiện chuyển đổi để xem giao diện câu hỏi và đáp án hiển thị tại đây.</p>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="fixed bottom-6 right-6 bg-slate-900 text-white px-5 py-3 rounded-xl shadow-2xl transition-all duration-300 opacity-0 transform translate-y-4 pointer-events-none z-50 text-xs font-medium flex items-center space-x-2 border border-slate-700">
+        <svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+        <span id="toast-msg">Notification</span>
+    </div>
+
+    <!-- Scripts -->
+    <script>
+        // --- Toast & Utils ---
+        function showToast(msg) {
+            const toast = document.getElementById('toast');
+            document.getElementById('toast-msg').innerText = msg;
+            toast.classList.remove('opacity-0', 'translate-y-4', 'pointer-events-none');
+            toast.classList.add('opacity-100', 'translate-y-0');
+            setTimeout(() => {
+                toast.classList.remove('opacity-100', 'translate-y-0');
+                toast.classList.add('opacity-0', 'translate-y-4', 'pointer-events-none');
+            }, 2500);
+        }
+
+        function copyText(elementId) {
+            const textarea = document.getElementById(elementId);
+            if (!textarea.value.trim()) {
+                showToast('Không có nội dung để sao chép!');
+                return;
+            }
+            textarea.select();
+            try {
+                document.execCommand('copy');
+                showToast('Đã sao chép vào bộ nhớ tạm!');
+            } catch (err) {
+                showToast('Lỗi khi sao chép!');
+            }
+        }
+
+        function updateCharCount(id, countId) {
+            const val = document.getElementById(id).value;
+            document.getElementById(countId).innerText = `${val.length} chars`;
+        }
+
+        function clearAll() {
+            document.getElementById('html-input').value = '';
+            document.getElementById('latex-input').value = '';
+            document.getElementById('preview-box').innerHTML = '<p class="text-slate-400 italic text-center py-6">Đã xóa dữ liệu.</p>';
+            updateCharCount('html-input', 'html-count');
+            updateCharCount('latex-input', 'latex-count');
+            showToast('Đã xóa toàn bộ dữ liệu!');
+        }
+
+        function swapPanels() {
+            const htmlVal = document.getElementById('html-input').value;
+            const latexVal = document.getElementById('latex-input').value;
+            document.getElementById('html-input').value = latexVal;
+            document.getElementById('latex-input').value = htmlVal;
+            updateCharCount('html-input', 'html-count');
+            updateCharCount('latex-input', 'latex-count');
+            showToast('Đã đổi vị trí nội dung 2 bên!');
+        }
+
+        function decodeHtmlEntities(htmlStr) {
+            const txt = document.createElement("textarea");
+            txt.innerHTML = htmlStr;
+            return txt.value;
+        }
+
+        // --- Core Helpers & Conversion Functions ---
+
+        // Escape / Unescape percent sign %
+        function convertPercentToLatex(str) {
+            return str.replace(/\\%/g, '___ESCAPED_PERCENT___')
+                      .replace(/%/g, '\\%')
+                      .replace(/___ESCAPED_PERCENT___/g, '\\%');
+        }
+
+        function convertPercentToHtml(str) {
+            return str.replace(/\\%/g, '%');
+        }
+
+        // Format conversion: <strong>...</strong> or <b>...</b> <-> \textbf{...}
+        function convertHtmlFormattingToLatex(str) {
+            return str.replace(/<(?:strong|b)[^>]*>([\s\S]*?)<\/(?:strong|b)>/gi, '\\textbf{$1}');
+        }
+
+        function convertLatexFormattingToHtml(str) {
+            let result = '';
+            let idx = 0;
+            while (idx < str.length) {
+                let tbIdx = str.indexOf('\\textbf{', idx);
+                if (tbIdx === -1) {
+                    result += str.substring(idx);
+                    break;
+                }
+                result += str.substring(idx, tbIdx);
+                let braceStart = tbIdx + 8; // len of '\textbf{'
+                let braceCount = 1;
+                let closeIdx = -1;
+                for (let i = braceStart; i < str.length; i++) {
+                    if (str[i] === '{') braceCount++;
+                    else if (str[i] === '}') {
+                        braceCount--;
+                        if (braceCount === 0) {
+                            closeIdx = i;
+                            break;
+                        }
+                    }
+                }
+                if (closeIdx !== -1) {
+                    let innerText = str.substring(braceStart, closeIdx);
+                    result += `<strong>${innerText}</strong>`;
+                    idx = closeIdx + 1;
+                } else {
+                    result += str.substring(tbIdx);
+                    break;
+                }
+            }
+            return result;
+        }
+
+        // Strip prefix "Câu X." & difficulty badge spans
+        function cleanHtmlQuestionStem(pHTML) {
+            let text = pHTML.trim();
+
+            // 1. Strip badge spans: <span class="badge-*">...</span>
+            text = text.replace(/<span\s+class=["']badge-[^"']*["'][^>]*>[\s\S]*?<\/span>/gi, '');
+
+            // 2. Strip strong/b wrapped "Câu X."
+            text = text.replace(/^(?:<strong[^>]*>|<b[^>]*>)\s*Câu\s*\d+\b[\s\:\.]*(?:<\/strong>|<\/b>)?\s*/gi, '');
+
+            // 3. Strip unwrapped "Câu X."
+            text = text.replace(/^\s*Câu\s*\d+\b[\s\:\.]*\s*/gi, '');
+
+            return text.trim();
+        }
+
+        // Parse correctAnswers dictionary from <script> block in HTML string
+        function parseAnswersFromHtmlScript(htmlText) {
+            const answerMap = {};
+            // Match q1: ['A'] or q1: ["A"]
+            const regex = /(q\d+)\s*:\s*\[\s*['"]([A-Za-z0-9]+)['"]\s*\]/g;
+            let match;
+            while ((match = regex.exec(htmlText)) !== null) {
+                answerMap[match[1]] = match[2].toUpperCase();
+            }
+            return answerMap;
+        }
+
+        // Parse LaTeX choices \Sai{...} / \Dung{...} handling nested braces
+        function parseLatexChoices(str) {
+            const choices = [];
+            let idx = 0;
+
+            while (idx < str.length) {
+                const dungIdx = str.indexOf('\\Dung', idx);
+                const saiIdx = str.indexOf('\\Sai', idx);
+
+                if (dungIdx === -1 && saiIdx === -1) break;
+
+                let isDung = false;
+                let startCmd = -1;
+
+                if (dungIdx !== -1 && (saiIdx === -1 || dungIdx < saiIdx)) {
+                    isDung = true;
+                    startCmd = dungIdx;
+                } else {
+                    isDung = false;
+                    startCmd = saiIdx;
+                }
+
+                const openBrace = str.indexOf('{', startCmd);
+                if (openBrace === -1) break;
+
+                let braceCount = 0;
+                let closeBrace = -1;
+
+                for (let i = openBrace; i < str.length; i++) {
+                    if (str[i] === '{') braceCount++;
+                    else if (str[i] === '}') {
+                        braceCount--;
+                        if (braceCount === 0) {
+                            closeBrace = i;
+                            break;
+                        }
+                    }
+                }
+
+                if (closeBrace !== -1) {
+                    const choiceContent = str.substring(openBrace + 1, closeBrace).trim();
+                    choices.push({ text: choiceContent, isCorrect: isDung });
+                    idx = closeBrace + 1;
+                } else {
+                    break;
+                }
+            }
+
+            return choices;
+        }
+
+        // --- 1. HTML -> LaTeX Conversion ---
+        function convertHtmlToLatex() {
+            const htmlText = document.getElementById('html-input').value;
+            if (!htmlText.trim()) {
+                showToast('Hãy nhập mã HTML trước!');
+                return;
+            }
+
+            // Parse correctAnswers map from JS block if present
+            const answerMap = parseAnswersFromHtmlScript(htmlText);
+
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(htmlText, 'text/html');
+            const qNodes = doc.querySelectorAll('div.question');
+
+            if (qNodes.length === 0) {
+                showToast('Cảnh báo: Không tìm thấy thẻ <div class="question">!');
+                return;
+            }
+
+            let latexResult = [];
+
+            qNodes.forEach(qDiv => {
+                let qLatex = '\\begin{question}\n';
+                const qId = qDiv.getAttribute('data-qid') || '';
+
+                // Process Question Body <p>
+                const p = qDiv.querySelector('p');
+                if (p) {
+                    let pHTML = p.innerHTML;
+                    pHTML = cleanHtmlQuestionStem(pHTML);
+
+                    // Convert Formatting & Math
+                    pHTML = convertHtmlFormattingToLatex(pHTML);
+                    pHTML = pHTML.replace(/\\\[([\s\S]*?)\\\]/g, '$$$$$1$$$$');
+                    pHTML = pHTML.replace(/\\\(([\s\S]*?)\\\)/g, '$$$1$$');
+                    pHTML = convertPercentToLatex(pHTML);
+                    pHTML = pHTML.replace(/<br\s*\/?>/gi, '\\\\');
+
+                    let cleanText = decodeHtmlEntities(pHTML);
+                    qLatex += `    ${cleanText}\n`;
+                }
+
+                qLatex += `    \\Datcot[4]\n`;
+
+                // Determine Correct Answer Letter
+                let correctVal = answerMap[qId] || '';
+
+                // Process Options <label>
+                const labels = qDiv.querySelectorAll('label');
+                labels.forEach(label => {
+                    const input = label.querySelector('input');
+                    const optVal = input ? input.value : '';
+                    const isChecked = input ? (input.checked || input.hasAttribute('checked')) : false;
+
+                    // Match either from JS script block or radio attribute
+                    const isCorrect = (correctVal && optVal.toUpperCase() === correctVal) || isChecked;
+
+                    const clone = label.cloneNode(true);
+                    const cloneInput = clone.querySelector('input');
+                    if (cloneInput) cloneInput.remove();
+
+                    let choiceHTML = clone.innerHTML;
+
+                    // Strip option prefix: "A. ", "B. ", etc.
+                    choiceHTML = choiceHTML.replace(/^\s*[A-Z]\.\s*/i, '').trim();
+
+                    // Convert Formatting & Math
+                    choiceHTML = convertHtmlFormattingToLatex(choiceHTML);
+                    choiceHTML = choiceHTML.replace(/\\\[([\s\S]*?)\\\]/g, '$$$$$1$$$$');
+                    choiceHTML = choiceHTML.replace(/\\\(([\s\S]*?)\\\)/g, '$$$1$$');
+                    choiceHTML = convertPercentToLatex(choiceHTML);
+
+                    let cleanChoice = decodeHtmlEntities(choiceHTML);
+
+                    if (isCorrect) {
+                        qLatex += `    \\Dung{${cleanChoice}}\n`;
+                    } else {
+                        qLatex += `    \\Sai{${cleanChoice}}\n`;
+                    }
+                });
+
+                qLatex += '\\end{question}';
+                latexResult.push(qLatex);
+            });
+
+            const finalLatex = latexResult.join('\n\n');
+            document.getElementById('latex-input').value = finalLatex;
+            updateCharCount('latex-input', 'latex-count');
+            showToast('Chuyển HTML ➔ LaTeX thành công!');
+            
+            renderPreview('html');
+        }
+
+        // --- 2. LaTeX -> HTML Conversion ---
+        function convertLatexToHtml() {
+            const latexText = document.getElementById('latex-input').value;
+            if (!latexText.trim()) {
+                showToast('Hãy nhập mã LaTeX trước!');
+                return;
+            }
+
+            const blocks = latexText.split('\\begin{question}');
+            if (blocks.length <= 1) {
+                showToast('Cảnh báo: Không tìm thấy khối \\begin{question}!');
+                return;
+            }
+
+            let htmlResult = [];
+            let correctAnswersMap = {};
+            let qIndex = 1;
+
+            for (let i = 1; i < blocks.length; i++) {
+                let block = blocks[i];
+                let endIdx = block.indexOf('\\end{question}');
+                if (endIdx !== -1) {
+                    block = block.substring(0, endIdx);
+                }
+
+                // Strip solution environment
+                block = block.replace(/\\begin\{solution\}[\s\S]*?\\end\{solution\}/gi, '');
+
+                // Separate Question Body from Choices
+                let firstChoiceIdx = block.length;
+                ['\\Datcot', '\\Sai', '\\Dung'].forEach(cmd => {
+                    let idx = block.indexOf(cmd);
+                    if (idx !== -1 && idx < firstChoiceIdx) {
+                        firstChoiceIdx = idx;
+                    }
+                });
+
+                let qBody = block.substring(0, firstChoiceIdx).trim();
+                let optionsStr = block.substring(firstChoiceIdx);
+
+                // Format Question Body
+                qBody = convertLatexFormattingToHtml(qBody);
+                qBody = convertPercentToHtml(qBody);
+                qBody = qBody.replace(/\$\$([\s\S]+?)\$\$/g, '\\[$1\\]');
+                qBody = qBody.replace(/\$([\s\S]+?)\$/g, '\\($1\\)');
+                qBody = qBody.replace(/\\\\/g, '<br>');
+
+                // Parse Choices
+                const choices = parseLatexChoices(optionsStr);
+
+                const qId = `q${qIndex}`;
+                let htmlBlock = `<div class="question" data-qid="${qId}">\n`;
+                htmlBlock += `  <p><strong>Câu ${qIndex}.</strong> ${qBody}</p>\n`;
+
+                const letters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'];
+                choices.forEach((choice, idx) => {
+                    let letter = letters[idx] || '?';
+                    let choiceTxt = choice.text;
+
+                    // Format Choice Text
+                    choiceTxt = convertLatexFormattingToHtml(choiceTxt);
+                    choiceTxt = convertPercentToHtml(choiceTxt);
+                    choiceTxt = choiceTxt.replace(/\$\$([\s\S]+?)\$\$/g, '\\[$1\\]');
+                    choiceTxt = choiceTxt.replace(/\$([\s\S]+?)\$/g, '\\($1\\)');
+
+                    if (choice.isCorrect) {
+                        correctAnswersMap[qId] = [letter];
+                    }
+
+                    htmlBlock += `  <label><input type="radio" name="${qId}" value="${letter}"> ${letter}. ${choiceTxt}</label>\n`;
+                });
+
+                htmlBlock += `</div>`;
+                htmlResult.push(htmlBlock);
+                qIndex++;
+            }
+
+            // Build checkAnswers Script Block
+            let scriptBlock = `\n<script>\nfunction checkAnswers() {\n  // Đã xáo trộn vị trí hiển thị, key đúng là:\n  const correctAnswers = {\n`;
+            let keyPairs = [];
+            let keys = Object.keys(correctAnswersMap);
+            
+            // Format 5 keys per line
+            for (let i = 0; i < keys.length; i += 5) {
+                let chunk = keys.slice(i, i + 5).map(k => `${k}: ['${correctAnswersMap[k]}']`).join(', ');
+                keyPairs.push('    ' + chunk);
+            }
+            scriptBlock += keyPairs.join(',\n') + '\n  };\n}\n<\/script>';
+
+            const finalHtml = htmlResult.join('\n\n') + '\n' + scriptBlock;
+            document.getElementById('html-input').value = finalHtml;
+            updateCharCount('html-input', 'html-count');
+            showToast('Chuyển LaTeX ➔ HTML thành công!');
+
+            renderPreview('html');
+        }
+
+        // --- 3. Live Preview ---
+        function renderPreview(mode) {
+            const previewBox = document.getElementById('preview-box');
+            let content = '';
+
+            if (mode === 'html') {
+                content = document.getElementById('html-input').value;
+            } else {
+                convertLatexToHtml();
+                content = document.getElementById('html-input').value;
+            }
+
+            if (!content.trim()) {
+                previewBox.innerHTML = '<p class="text-slate-400 italic text-center py-6">Không có nội dung để hiển thị preview.</p>';
+                return;
+            }
+
+            previewBox.innerHTML = `
+                <style>
+                    .question { margin-bottom: 1.5rem; padding-bottom: 1rem; border-bottom: 1px dashed #cbd5e1; }
+                    .question p { font-weight: 500; margin-bottom: 0.5rem; color: #1e293b; }
+                    .question label { display: block; margin: 0.35rem 0; color: #334155; cursor: pointer; }
+                    .question input[type="radio"] { margin-right: 0.5rem; accent-color: #4f46e5; }
+                </style>
+                ${content}
+            `;
+
+            if (window.MathJax && window.MathJax.typesetPromise) {
+                MathJax.typesetPromise([previewBox]).catch(err => console.error('MathJax error:', err));
+            }
+        }
+
+        // --- Load Sample Data ---
+        function loadSampleData() {
+            const sampleHtml = `<div class="question" data-qid="q19">
+  <p><strong>Câu 19.</strong> Có 5 sinh viên nam và 5 sinh viên nữ xếp ngẫu nhiên thành một hàng dọc. Biết rằng trong hàng vừa xếp, <strong>không có bất kỳ hai sinh viên nữ nào đứng cạnh nhau</strong>. Xác suất để người đứng ở vị trí đầu hàng là sinh viên nữ bằng:<span class="badge-hard">Khó</span></p>
+  <label><input type="radio" name="q19" value="A"> A. 1/5</label>
+  <label><input type="radio" name="q19" value="B"> B. 1/10</label>
+  <label><input type="radio" name="q19" value="C"> C. 1/2</label>
+  <label><input type="radio" name="q19" value="D"> D. 1/4</label>
+</div>
+
+<div class="question" data-qid="q20">
+  <p><strong>Câu 20.</strong> Hai người A và B lần lượt tung một con xúc xắc cân đối. Người A tung trước. Ai tung được mặt 6 chấm trước sẽ là người chiến thắng trò chơi và trò chơi kết thúc. Biết rằng cuối cùng <strong>người A là người chiến thắng</strong>, hãy tính xác suất để A giành chiến thắng ngay trong <strong>lần tung đầu tiên của mình</strong>.<span class="badge-vhard">Rất khó</span></p>
+  <label><input type="radio" name="q20" value="A"> A. 5/36</label>
+  <label><input type="radio" name="q20" value="B"> B. 6/11</label>
+  <label><input type="radio" name="q20" value="C"> C. 11/36</label>
+  <label><input type="radio" name="q20" value="D"> D. 1/6</label>
+</div>
+
+<script>
+function checkAnswers() {
+  // Đã xáo trộn vị trí hiển thị, key đúng là:
+  const correctAnswers = {
+    q19: ['C'], q20: ['C']
+  };
+}
+<\/script>`;
+
+            const sampleLatex = `\\begin{question}
+    Có 5 sinh viên nam và 5 sinh viên nữ xếp ngẫu nhiên thành một hàng dọc. Biết rằng trong hàng vừa xếp, \\textbf{không có bất kỳ hai sinh viên nữ nào đứng cạnh nhau}. Xác suất để người đứng ở vị trí đầu hàng là sinh viên nữ bằng:
+    \\Datcot[4]
+    \\Sai{1/5}
+    \\Sai{1/10}
+    \\Dung{1/2}
+    \\Sai{1/4}
+\\end{question}
+
+\\begin{question}
+    Hai người A và B lần lượt tung một con xúc xắc cân đối. Người A tung trước. Ai tung được mặt 6 chấm trước sẽ là người chiến thắng trò chơi và trò chơi kết thúc. Biết rằng cuối cùng \\textbf{người A là người chiến thắng}, hãy tính xác suất để A giành chiến thắng ngay trong \\textbf{lần tung đầu tiên của mình}.
+    \\Datcot[4]
+    \\Sai{5/36}
+    \\Sai{6/11}
+    \\Dung{11/36}
+    \\Sai{1/6}
+\\end{question}`;
+
+            document.getElementById('html-input').value = sampleHtml;
+            document.getElementById('latex-input').value = sampleLatex;
+
+            updateCharCount('html-input', 'html-count');
+            updateCharCount('latex-input', 'latex-count');
+
+            renderPreview('html');
+            showToast('Đã tải mẫu câu hỏi & bảng đáp án!');
+        }
+
+        window.onload = function() {
+            loadSampleData();
+        };
+    </script>
+</body>
+</html>

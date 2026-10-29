@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cách tính tích phân hàm một biến và tích phân 2 biến (tích phân mặt)</title>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f9f9f9;
+            color: #333;
+        }
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+            border-bottom: 3px solid #3498db;
+            padding-bottom: 10px;
+        }
+        h2 {
+            color: #2980b9;
+            margin-top: 30px;
+            border-left: 4px solid #3498db;
+            padding-left: 10px;
+        }
+        h3 {
+            color: #16a085;
+            margin-top: 25px;
+        }
+        .section {
+            background: white;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .formula {
+            background: #f0f8ff;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+            border-left: 3px solid #3498db;
+        }
+        .example {
+            background: #e8f5e9;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+            border-left: 3px solid #27ae60;
+        }
+        .note {
+            background: #fff3cd;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+            border-left: 3px solid #f39c12;
+        }
+        ul, ol {
+            margin-left: 20px;
+        }
+        li {
+            margin: 8px 0;
+        }
+        code {
+            background: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+        }
+    </style>
+</head>
+<body>
+    <h1>Cách tính tích phân hàm một biến và tích phân 2 biến (tích phân mặt)</h1>
+
+    <div class="section">
+        <h2>1. Tích phân hàm một biến</h2>
+        
+        <h3>1.1. Khái niệm cơ bản</h3>
+        <p>Tích phân xác định của hàm số \(f(x)\) trên đoạn \([a, b]\) được ký hiệu là:</p>
+        <div class="formula">
+            \[ \int_{a}^{b} f(x) \, dx \]
+        </div>
+        <pTrong đó:</p>
+        <ul>
+            <li>\(a\): cận dưới của tích phân</li>
+            <li>\(b\): cận trên của tích phân</li>
+            <li>\(f(x)\): hàm dưới dấu tích phân</li>
+            <li>\(dx\): vi phân của biến \(x\)</li>
+        </ul>
+
+        <h3>1.2. Phương pháp tính tích phân một biến</h3>
+        
+        <h4>A. Sử dụng công thức Newton-Leibniz</h4>
+        <p>Nếu \(F(x)\) là nguyên hàm của \(f(x)\), tức là \(F'(x) = f(x)\), thì:</p>
+        <div class="formula">
+            \[ \int_{a}^{b} f(x) \, dx = F(b) - F(a) = \left. F(x) \right|_{a}^{b} \]
+        </div>
+
+        <h4>B. Phương pháp đổi biến số</h4>
+        <p>Cho \(x = g(t)\) với \(g'(t)\) liên tục, khi đó:</p>
+        <div class="formula">
+            \[ \int_{a}^{b} f(x) \, dx = \int_{\alpha}^{\beta} f(g(t)) \cdot g'(t) \, dt \]
+        </div>
+        <pTrong đó: \(a = g(\alpha)\) và \(b = g(\beta)\)</p>
+
+        <h4>C. Phương pháp tích phân từng phần</h4>
+        <div class="formula">
+            \[ \int_{a}^{b} u \, dv = \left. uv \right|_{a}^{b} - \int_{a}^{b} v \, du \]
+        </div>
+        <pTrong đó: \(du = u'dx\) và \(dv = v'dx\)</p>
+
+        <h3>1.3. Ví dụ minh họa</h3>
+        <div class="example">
+            <p><strong>Ví dụ 1:</strong> Tính \( \int_{0}^{1} x^2 \, dx \)</p>
+            <p>Nguyên hàm của \(x^2\) là \( \frac{x^3}{3} \)</p>
+            <p>\[ \int_{0}^{1} x^2 \, dx = \left. \frac{x^3}{3} \right|_{0}^{1} = \frac{1^3}{3} - \frac{0^3}{3} = \frac{1}{3} \]</p>
+        </div>
+
+        <div class="example">
+            <p><strong>Ví dụ 2:</strong> Tính \( \int_{0}^{\pi} x \sin(x) \, dx \) (tích phân từng phần)</p>
+            <pĐặt: \(u = x \Rightarrow du = dx\)</p>
+            <p>\(dv = \sin(x)dx \Rightarrow v = -\cos(x)\)</p>
+            <p>\[ \int_{0}^{\pi} x \sin(x) \, dx = \left. -x\cos(x) \right|_{0}^{\pi} + \int_{0}^{\pi} \cos(x) \, dx \]</p>
+            <p>\[ = (-\pi\cos(\pi) + 0\cos(0)) + \left. \sin(x) \right|_{0}^{\pi} = \pi + 0 = \pi \]</p>
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>2. Tích phân 2 biến (Tích phân mặt)</h2>
+        
+        <h3>2.1. Khái niệm tích phân mặt</h3>
+        <p>Tích phân mặt của hàm \(f(x, y, z)\) trên mặt cong \(S\) được ký hiệu:</p>
+        <div class="formula">
+            \[ \iint_{S} f(x, y, z) \, dS \]
+        </div>
+        <pTrong đó \(dS\) là yếu tố diện tích bề mặt.</p>
+
+        <h3>2.2. Các dạng mặt cong và công thức tính</h3>
+
+        <h4>A. Mặt cong cho bởi \(z = g(x, y)\)</h4>
+        <p>Nếu mặt \(S\) được cho bởi \(z = g(x, y)\) với \((x, y) \in D\), thì:</p>
+        <div class="formula">
+            \[ \iint_{S} f(x, y, z) \, dS = \iint_{D} f(x, y, g(x, y)) \cdot \sqrt{1 + \left(\frac{\partial g}{\partial x}\right)^2 + \left(\frac{\partial g}{\partial y}\right)^2} \, dx \, dy \]
+        </div>
+
+        <h4>B. Mặt cong tham số hóa</h4>
+        <p>Nếu mặt \(S\) được tham số hóa bởi \( \vec{r}(u, v) = (x(u,v), y(u,v), z(u,v)) \) với \((u, v) \in D\), thì:</p>
+        <div class="formula">
+            \[ \iint_{S} f(x, y, z) \, dS = \iint_{D} f(\vec{r}(u, v)) \cdot \left\| \frac{\partial \vec{r}}{\partial u} \times \frac{\partial \vec{r}}{\partial v} \right\| \, du \, dv \]
+        </div>
+        <pTrong đó \( \times \) là tích có hướng và \( \|\cdot\| \) là độ dài vectơ.</p>
+
+        <h3>2.3. Các bước tính tích phân mặt</h3>
+        <ol>
+            <li>Xác định phương trình của mặt cong \(S\)</li>
+            <li>Chọn phương pháp tham số hóa phù hợp</li>
+            <li>Tính các đạo hàm riêng cần thiết</li>
+            <li>Tính yếu tố diện tích \(dS\)</li>
+            <li>Thay vào công thức và chuyển về tích phân kép trên miền \(D\)</li>
+            <li>Tính tích phân kép bằng cách lộih था theo thứ tự phù hợp</li>
+        </ol>
+
+        <h3>2.4. Ví dụ minh họa</h3>
+        <div class="example">
+            <p><strong>Ví dụ 3:</strong> Tính \( \iint_{S} x \, dS \) với \(S\) là phần mặt phẳng \(z = 2 - x - y\) nằm trong góc phần thứ nhất (\(x \geq 0, y \geq 0, z \geq 0\))</p>
+            
+            <p><strong>Bước 1:</strong> Xác định miền \(D\) trong mặt phẳng \(xy\)</p>
+            <p>Khi \(z = 0\): \(2 - x - y = 0 \Rightarrow y = 2 - x\)</p>
+            <p>Miền \(D\): \(0 \leq x \leq 2\), \(0 \leq y \leq 2 - x\)</p>
+            
+            <p><strong>Bước 2:</strong> Tính các đạo hàm riêng</p>
+            <p>\( \frac{\partial z}{\partial x} = -1 \), \( \frac{\partial z}{\partial y} = -1 \)</p>
+            
+            <p><strong>Bước 3:</strong> Tính \(dS\)</p>
+            <p>\[ dS = \sqrt{1 + (-1)^2 + (-1)^2} \, dx \, dy = \sqrt{3} \, dx \, dy \]</p>
+            
+            <p><strong>Bước 4:</strong> Tính tích phân</p>
+            <p>\[ \iint_{S} x \, dS = \iint_{D} x \cdot \sqrt{3} \, dx \, dy = \sqrt{3} \int_{0}^{2} \int_{0}^{2-x} x \, dy \, dx \]</p>
+            <p>\[ = \sqrt{3} \int_{0}^{2} x(2-x) \, dx = \sqrt{3} \int_{0}^{2} (2x - x^2) \, dx \]</p>
+            <p>\[ = \sqrt{3} \left[ x^2 - \frac{x^3}{3} \right]_{0}^{2} = \sqrt{3} \left( 4 - \frac{8}{3} \right) = \sqrt{3} \cdot \frac{4}{3} = \frac{4\sqrt{3}}{3} \]</p>
+        </div>
+
+        <div class="example">
+            <p><strong>Ví dụ 4:</strong> Tính diện tích mặt cầu \(x^2 + y^2 + z^2 = R^2\)</p>
+            <p>Sử dụng tọa độ cầu:</p>
+            <p>\(x = R\sin\phi\cos\theta\), \(y = R\sin\phi\sin\theta\), \(z = R\cos\phi\)</p>
+            <p>\(0 \leq \phi \leq \pi\), \(0 \leq \theta \leq 2\pi\)</p>
+            <p>\[ dS = R^2\sin\phi \, d\phi \, d\theta \]</p>
+            <p>\[ S = \iint_{S} dS = \int_{0}^{2\pi} \int_{0}^{\pi} R^2\sin\phi \, d\phi \, d\theta \]</p>
+            <p>\[ = R^2 \int_{0}^{2\pi} d\theta \int_{0}^{\pi} \sin\phi \, d\phi = R^2 \cdot 2\pi \cdot 2 = 4\pi R^2 \]</p>
+        </div>
+    </div>
+
+    <div class="section">
+        <h3>2.5. Lưu ý quan trọng</h3>
+        <div class="note">
+            <ul>
+                <li>Tích phân mặt khác với tích phân kép: tích phân mặt được tính trên bề mặt cong trong không gian 3 chiều, còn tích phân kép được tính trên miền phẳng trong mặt phẳng 2 chiều</li>
+                <li>Việc chọn phương pháp tham số hóa phù hợp sẽ đơn giản hóa đáng kể bài toán</li>
+                <li>Đối với các mặt đối xứng, có thể tận dụng tính đối xứng để giảm miền tích phân</li>
+                <li>Luôn kiểm tra đơn vị và hướng của vectơ pháp tuyến khi tính tích phân mặt có hướng</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>Tóm tắt</h2>
+        <table border="1" cellpadding="10" style="border-collapse: collapse; width: 100%;">
+            <tr style="background-color: #3498db; color: white;">
+                <th>Loại tích phân</th>
+                <th>Ký hiệu</th>
+                <th>Công thức chính</th>
+            </tr>
+            <tr>
+                <td>Tích phân một biến</td>
+                <td>\( \int_{a}^{b} f(x) \, dx \)</td>
+                <td>\( F(b) - F(a) \)</td>
+            </tr>
+            <tr>
+                <td>Tích phân mặt (dạng \(z = g(x,y)\))</td>
+                <td>\( \iint_{S} f(x,y,z) \, dS \)</td>
+                <td>\( \iint_{D} f \cdot \sqrt{1 + g_x^2 + g_y^2} \, dx \, dy \)</td>
+            </tr>
+            <tr>
+                <td>Tích phân mặt (tham số)</td>
+                <td>\( \iint_{S} f \, dS \)</td>
+                <td>\( \iint_{D} f(\vec{r}) \cdot \|\vec{r}_u \times \vec{r}_v\| \, du \, dv \)</td>
+            </tr>
+        </table>
+    </div>
+
+    <p style="text-align: center; margin-top: 30px; color: #7f8c8d;">
+        <em>Tài liệu này được biên soạn cho mục đích học tập và nghiên cứu toán học</em>
+    </p>
+</body>
+</html>

@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bài Tập Trắc Nghiệm Công Thức Bayes</title>
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body);"></script>
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']],
+                processEscapes: true
+            }
+        };
+    </script>
+    <script id="MathJax-script" async
+          src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+    </script>
+    <style>
+        :root {
+            --primary-color: #2b6cb0;
+            --success-color: #38a169;
+            --error-color: #e53e3e;
+            --bg-color: #f7fafc;
+            --card-bg: #ffffff;
+            --text-color: #2d3748;
+        }
+        .author {
+        text-align: right;
+        font-style: italic;
+        margin-top: 30px;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 20px;
+            background: var(--card-bg);
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        }
+
+        header h1 {
+            color: var(--primary-color);
+            margin-bottom: 10px;
+        }
+
+        header h1 i {
+            margin-right: 10px;
+        }
+
+        .quiz-card {
+            background: var(--card-bg);
+            padding: 25px;
+            border-radius: 8px;
+            margin-bottom: 25px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            transition: transform 0.2s;
+        }
+
+        .question-title {
+            font-size: 1.15rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: #1a202c;
+        }
+
+        .options-container {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .option-label {
+            display: flex;
+            align-items: center;
+            padding: 12px 15px;
+            border: 2px solid #e2e8f0;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .option-label:hover {
+            background-color: #edf2f7;
+            border-color: #cbd5e0;
+        }
+
+        .option-label input {
+            margin-right: 12px;
+            transform: scale(1.2);
+        }
+
+        /* Lớp định dạng khi kiểm tra kết quả */
+        .option-label.correct {
+            background-color: #c6f6d5 !important;
+            border-color: var(--success-color) !important;
+            color: #22543d;
+            font-weight: 600;
+        }
+
+        .option-label.incorrect {
+            background-color: #fed7d7 !important;
+            border-color: var(--error-color) !important;
+            color: #742a2a;
+        }
+
+        .rationale {
+            margin-top: 12px;
+            padding: 10px 15px;
+            background-color: #ebf8ff;
+            border-left: 4px solid #3182ce;
+            border-radius: 4px;
+            font-size: 0.95rem;
+            display: none;
+        }
+
+        .hint-btn {
+            background: none;
+            border: none;
+            color: var(--primary-color);
+            cursor: pointer;
+            font-size: 0.9rem;
+            margin-top: 10px;
+            padding: 0;
+            text-decoration: underline;
+        }
+        .hint-text {
+            display: none;
+            font-size: 0.9rem;
+            color: #718096;
+            font-style: italic;
+            margin-top: 5px;
+        }
+
+        #submit-btn {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 4px 6px rgba(43, 108, 176, 0.3);
+            transition: background 0.2s;
+        }
+
+        #submit-btn:hover {
+            background-color: #2b6cb0;
+        }
+
+        #result-box {
+            display: none;
+            text-align: center;
+            padding: 25px;
+            background: #e6fffa;
+            border: 2px solid #319795;
+            border-radius: 8px;
+            margin-top: 30px;
+            font-size: 1.3rem;
+            color: #234e52;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+
+<div class="container">
+    <header>
+        <h1><i class="fas fa-diagram-project"></i>1.4  Công thức xác suất đầy đủ. <br> Công Thức Bayes</h1>
+        <p class="author">
+            Biên soạn: <strong>Ts. Khổng Văn Hải</strong><br>
+            Khoa Toán - Tin, Đại học Bách Khoa Hà Nội
+        </p>
+    </header>
+
+    
+
+    <form id="quiz-form">
+        <div class="quiz-card" data-q="1">
+            <div class="question-title">Câu 1: Một hệ thống phát hiện gian lận thẻ tín dụng gắn cờ cảnh báo đối với $98\%$ giao dịch gian lận thật sự và $1\%$ giao dịch hợp pháp (dương tính giả). Biết rằng tỷ lệ giao dịch gian lận thực tế trong hệ thống chỉ chiếm $0.5\%$. Nếu một giao dịch bất kỳ bị hệ thống gắn cờ cảnh báo, xác suất để giao dịch đó thực sự là gian lận là bao nhiêu?</div>
+            <div class="options-container">
+                <label class="option-label"><input type="radio" name="q1" value="A"> 33.00%</label>
+                <label class="option-label"><input type="radio" name="q1" value="B"> 98.00%</label>
+                <label class="option-label"><input type="radio" name="q1" value="C"> 0.50%</label>
+                <label class="option-label"><input type="radio" name="q1" value="D"> 1.49%</label>
+            </div>
+            <button type="button" class="hint-btn" onclick="toggleHint(1)">Gợi ý</button>
+            <div class="hint-text" id="hint-1">Xác định rõ hai giả thuyết: giao dịch gian lận và giao dịch hợp pháp, sau đó tính tổng xác suất hệ thống phát cảnh báo.</div>
+            <div class="rationale" id="rat-1"><b>Giải thích:</b> Áp dụng công thức Bayes: $P(G|C) = \frac{0.005 \times 0.98}{0.005 \times 0.98 + 0.995 \times 0.01} = \frac{0.0049}{0.01485} \approx 33.00\%$.</div>
+        </div>
+
+        <div class="quiz-card" data-q="2">
+            <div class="question-title">Câu 2: Ba xạ thủ độc lập cùng bắn vào một mục tiêu, mỗi người bắn 1 viên. Xác suất trúng bia của xạ thủ I, II, III lần lượt là $0.6$; $0.7$ và $0.8$. Sau khi bắn, kiểm tra thấy bia chỉ có đúng 1 viên trúng. Xác suất để viên trúng bia đó là của xạ thủ I là bao nhiêu?</div>
+            <div class="options-container">
+                <label class="option-label"><input type="radio" name="q2" value="A"> 6.25%</label>
+                <label class="option-label"><input type="radio" name="q2" value="B"> 60.00%</label>
+                <label class="option-label"><input type="radio" name="q2" value="C"> 18.75%</label>
+                <label class="option-label"><input type="radio" name="q2" value="D"> 37.50%</label>
+            </div>
+            <button type="button" class="hint-btn" onclick="toggleHint(2)">Gợi ý</button>
+            <div class="hint-text" id="hint-2">Biến cố 'có đúng 1 viên trúng bia' gồm 3 trường hợp xung khắc: chỉ người I trúng, chỉ người II trúng, hoặc chỉ người III trúng.</div>
+            <div class="rationale" id="rat-2"><b>Giải thích:</b> Xác suất để duy nhất xạ thủ I trúng là $0.6 \times 0.3 \times 0.2 = 0.036$. Tổng xác suất có đúng 1 viên trúng là $0.036 + 0.056 + 0.448 = 0.576$. Kết quả là $\frac{0.036}{0.576} = 6.25\%$.</div>
+        </div>
+
+        <div class="quiz-card" data-q="3">
+            <div class="question-title">Câu 3: Một sinh viên đi thi trắc nghiệm gồm các câu hỏi có 4 phương án lựa chọn (chỉ có 1 đáp án đúng). Sinh viên này thuộc bài với xác suất $70\%$; nếu thuộc bài thì chắc chắn chọn đúng, nếu không thuộc bài thì chọn ngẫu nhiên 1 trong 4 phương án. Biết sinh viên này trả lời đúng câu hỏi, xác suất sinh viên đó thực sự thuộc bài là bao nhiêu?</div>
+            <div class="options-container">
+                <label class="option-label"><input type="radio" name="q3" value="A"> 90.32%</label>
+                <label class="option-label"><input type="radio" name="q3" value="B"> 70.00%</label>
+                <label class="option-label"><input type="radio" name="q3" value="C"> 25.00%</label>
+                <label class="option-label"><input type="radio" name="q3" value="D"> 77.50%</label>
+            </div>
+            <button type="button" class="hint-btn" onclick="toggleHint(3)">Gợi ý</button>
+            <div class="hint-text" id="hint-3">Sinh viên có thể làm đúng bằng hai cách: thuộc bài rồi chọn đúng, hoặc không thuộc bài nhưng may mắn đoán mò trúng.</div>
+            <div class="rationale" id="rat-3"><b>Giải thích:</b> Xác suất chọn đúng đầy đủ là $0.7 \times 1 + 0.3 \times 0.25 = 0.775$. Xác suất thuộc bài khi làm đúng là $\frac{0.7}{0.775} \approx 90.32\%$.</div>
+        </div>
+
+        <div class="quiz-card" data-q="4">
+            <div class="question-title">Câu 4: Kênh truyền tín hiệu nhị phân truyền đi các ký hiệu 0 và 1 với tỷ lệ xuất phát lần lượt là $60\%$ và $40\%$. Do có nhiễu trên đường truyền, ký hiệu 0 bị thu thành 1 với xác suất $5\%$, và ký hiệu 1 bị thu thành 0 với xác suất $10\%$. Nếu phía thu nhận được ký hiệu 1, xác suất để phía phát đã gửi đi ký hiệu 1 là bao nhiêu?</div>
+            <div class="options-container">
+                <label class="option-label"><input type="radio" name="q4" value="A"> 92.31%</label>
+                <label class="option-label"><input type="radio" name="q4" value="B"> 40.00%</label>
+                <label class="option-label"><input type="radio" name="q4" value="C"> 90.00%</label>
+                <label class="option-label"><input type="radio" name="q4" value="D"> 7.69%</label>
+            </div>
+            <button type="button" class="hint-btn" onclick="toggleHint(4)">Gợi ý</button>
+            <div class="hint-text" id="hint-4">Hãy tính tổng xác suất để máy thu nhận được tín hiệu 1 từ hai nguồn: do phát 0 bị lỗi thành 1, hoặc phát 1 truyền đúng thành 1.</div>
+            <div class="rationale" id="rat-4"><b>Giải thích:</b> Tổng xác suất nhận được 1 là $0.6 \times 0.05 + 0.4 \times 0.9 = 0.39$. Xác suất phát 1 khi nhận 1 là $\frac{0.4 \times 0.9}{0.39} = \frac{0.36}{0.39} \approx 92.31\%$.</div>
+        </div>
+
+        <div class="quiz-card" data-q="5">
+            <div class="question-title">Câu 5: Một công ty bảo hiểm chia khách hàng thành hai nhóm: nhóm nguy cơ cao (chiếm $20\%$ khách hàng) và nhóm nguy cơ thấp (chiếm $80\%$). Xác suất gặp tai nạn trong năm của một người thuộc nhóm nguy cơ cao là $15\%$, và thuộc nhóm nguy cơ thấp là $5\%$. Lấy ngẫu nhiên một khách hàng và thấy người này gặp tai nạn trong năm qua. Xác suất khách hàng này thuộc nhóm nguy cơ cao là bao nhiêu?</div>
+            <div class="options-container">
+                <label class="option-label"><input type="radio" name="q5" value="A"> 42.86%</label>
+                <label class="option-label"><input type="radio" name="q5" value="B"> 20.00%</label>
+                <label class="option-label"><input type="radio" name="q5" value="C"> 15.00%</label>
+                <label class="option-label"><input type="radio" name="q5" value="D"> 57.14%</label>
+            </div>
+            <button type="button" class="hint-btn" onclick="toggleHint(5)">Gợi ý</button>
+            <div class="hint-text" id="hint-5">Tính xác suất đầy đủ để một khách hàng bất kỳ gặp tai nạn, sau đó dùng định lý Bayes để cập nhật lại tỷ lệ của nhóm nguy cơ cao.</div>
+            <div class="rationale" id="rat-5"><b>Giải thích:</b> Tổng xác suất gặp tai nạn là $0.2 \times 0.15 + 0.8 \times 0.05 = 0.07$. Xác suất thuộc nhóm nguy cơ cao là $\frac{0.03}{0.07} \approx 42.86\%$.</div>
+        </div>
+
+        <div class="quiz-card" data-q="6">
+            <div class="question-title">Câu 6: Hộp A chứa 5 bi xanh và 3 bi đỏ. Hộp B chứa 2 bi xanh và 6 bi đỏ. Người ta lấy ngẫu nhiên 1 viên bi từ hộp A bỏ vào hộp B, sau đó từ hộp B lấy ra 1 viên bi thì thấy nó màu xanh. Xác suất viên bi được chuyển từ hộp A sang hộp B ban đầu là bi đỏ bằng bao nhiêu?</div>
+            <div class="options-container">
+                <label class="option-label"><input type="radio" name="q6" value="A"> 24.14%</label>
+                <label class="option-label"><input type="radio" name="q6" value="B"> 37.50%</label>
+                <label class="option-label"><input type="radio" name="q6" value="C"> 75.86%</label>
+                <label class="option-label"><input type="radio" name="q6" value="D"> 22.22%</label>
+            </div>
+            <button type="button" class="hint-btn" onclick="toggleHint(6)">Gợi ý</button>
+            <div class="hint-text" id="hint-6">Việc chuyển bi làm thay đổi số lượng thành phần trong hộp B. Hãy lập hai giả thuyết: Chuyển bi xanh hoặc Chuyển bi đỏ.</div>
+            <div class="rationale" id="rat-6"><b>Giải thích:</b> Xác suất chuyển đỏ là $\frac{3}{8}$ $\rightarrow$ B có 2 xanh, 7 đỏ. Xác suất chuyển xanh là $\frac{5}{8}$ $\rightarrow$ B có 3 xanh, 6 đỏ. Tổng $P(X) = \frac{21}{72}$. Xác suất hậu nghiệm cần tìm là $\frac{6/72}{21/72} = \frac{6}{21} \approx 24.14\%$.</div>
+        </div>
+
+        <div class="quiz-card" data-q="7">
+            <div class="question-title">Câu 7: Tại một thành phố, $85\%$ xe taxi có màu xanh lá cây và $15\%$ có màu xanh dương. Một vụ tai nạn xảy ra vào ban đêm liên quan đến một chiếc taxi. Một nhân chứng duy nhất khai rằng chiếc xe gây tai nạn có màu xanh dương. Tòa án kiểm tra độ tin cậy của nhân chứng và thấy họ nhận diện đúng màu xe trong $80\%$ trường hợp và nhìn nhầm trong $20\%$ trường hợp. Xác suất thực tế chiếc xe gây tai nạn có màu xanh dương là bao nhiêu?</div>
+            <div class="options-container">
+                <label class="option-label"><input type="radio" name="q7" value="A"> 41.38%</label>
+                <label class="option-label"><input type="radio" name="q7" value="B"> 80.00%</label>
+                <label class="option-label"><input type="radio" name="q7" value="C"> 15.00%</label>
+                <label class="option-label"><input type="radio" name="q7" value="D"> 58.62%</label>
+            </div>
+            <button type="button" class="hint-btn" onclick="toggleHint(7)">Gợi ý</button>
+            <div class="hint-text" id="hint-7">Nhân chứng có thể nói 'xanh dương' trong hai trường hợp: nhìn đúng xe xanh dương thật, hoặc nhìn nhầm xe xanh lá cây thành xanh dương.</div>
+            <div class="rationale" id="rat-7"><b>Giải thích:</b> Tổng xác suất nhân chứng gọi tên 'xanh dương' là $0.15 \times 0.8 + 0.85 \times 0.2 = 0.29$. Xác suất thực sự xe xanh dương là $\frac{0.12}{0.29} \approx 41.38\%$.</div>
+        </div>
+
+        <div class="quiz-card" data-q="8">
+            <div class="question-title">Câu 8: Một dây chuyền sản xuất tự động sử dụng một máy quét laser để phân loại sản phẩm lỗi. Máy quét này phát hiện chính xác $95\%$ sản phẩm lỗi, nhưng lại phân loại nhầm $2\%$ sản phẩm đạt tiêu chuẩn thành lỗi. Biết dây chuyền có tỷ lệ lỗi chung là $3\%$. Nếu máy quét báo một sản phẩm là 'Lỗi', xác suất để sản phẩm đó thực sự đạt tiêu chuẩn là bao nhiêu?</div>
+            <div class="options-container">
+                <label class="option-label"><input type="radio" name="q8" value="A"> 40.51%</label>
+                <label class="option-label"><input type="radio" name="q8" value="B"> 59.49%</label>
+                <label class="option-label"><input type="radio" name="q8" value="C"> 2.00%</label>
+                <label class="option-label"><input type="radio" name="q8" value="D"> 97.00%</label>
+            </div>
+            <button type="button" class="hint-btn" onclick="toggleHint(8)">Gợi ý</button>
+            <div class="hint-text" id="hint-8">Hãy chú ý câu hỏi yêu cầu tính xác suất sản phẩm 'đạt tiêu chuẩn' (tức là báo sai) sau khi máy đã phát tín hiệu cảnh báo lỗi.</div>
+            <div class="rationale" id="rat-8"><b>Giải thích:</b> Tổng tỷ lệ báo lỗi là $0.03 \times 0.95 + 0.97 \times 0.02 = 0.0479$. Xác suất sản phẩm đạt chuẩn bị báo nhầm là $\frac{0.97 \times 0.02}{0.0479} \approx 40.51\%$.</div>
+        </div>
+
+        <div class="quiz-card" data-q="9">
+            <div class="question-title">Câu 9: Trong một kỳ thi chứng chỉ, thí sinh được chia thành 2 nhóm: nhóm A chiếm $60\%$ (được đào tạo bài bản) và nhóm B chiếm $40\%$ (tự học). Tỷ lệ thi đỗ của nhóm A là $85\%$, trong khi nhóm B là $50\%$. Chọn ngẫu nhiên một chứng chỉ của thí sinh thi đỗ. Xác suất chứng chỉ này thuộc về một thí sinh thuộc nhóm B là bao nhiêu?</div>
+            <div class="options-container">
+                <label class="option-label"><input type="radio" name="q9" value="A"> 28.17%</label>
+                <label class="option-label"><input type="radio" name="q9" value="B"> 40.00%</label>
+                <label class="option-label"><input type="radio" name="q9" value="C"> 50.00%</label>
+                <label class="option-label"><input type="radio" name="q9" value="D"> 71.83%</label>
+            </div>
+            <button type="button" class="hint-btn" onclick="toggleHint(9)">Gợi ý</button>
+            <div class="hint-text" id="hint-9">Tính tổng xác suất một thí sinh bất kỳ thi đỗ, sau đó lấy phần đóng góp của nhóm B chia cho tổng số đó.</div>
+            <div class="rationale" id="rat-9"><b>Giải thích:</b> Tổng tỷ lệ đỗ là $0.6 \times 0.85 + 0.4 \times 0.5 = 0.71$. Xác suất thuộc nhóm B là $\frac{0.2}{0.71} \approx 28.17\%$.</div>
+        </div>
+
+        <div class="quiz-card" data-q="10">
+            <div class="question-title">Câu 10: Thống kê giao thông cho thấy $10\%$ tài xế lưu thông trên đường vào ban đêm có nồng độ cồn vượt quá quy định. Xác suất một tài xế say xỉn gây ra tai nạn là $8\%$, trong khi xác suất này ở tài xế tỉnh táo chỉ là $1\%$. Đêm qua xảy ra một vụ tai nạn. Xác suất để tài xế gây tai nạn đó đang trong tình trạng say xỉn là bao nhiêu?</div>
+            <div class="options-container">
+                <label class="option-label"><input type="radio" name="q10" value="A"> 47.06%</label>
+                <label class="option-label"><input type="radio" name="q10" value="B"> 10.00%</label>
+                <label class="option-label"><input type="radio" name="q10" value="C"> 8.00%</label>
+                <label class="option-label"><input type="radio" name="q10" value="D"> 52.94%</label>
+            </div>
+            <button type="button" class="hint-btn" onclick="toggleHint(10)">Gợi ý</button>
+            <div class="hint-text" id="hint-1">Phân tích không gian mẫu thành hai trạng thái của tài xế: có nồng độ cồn và không có nồng độ cồn trước khi tính xác suất tai nạn đầy đủ.</div>
+            <div class="rationale" id="rat-10"><b>Giải thích:</b> Tổng xác suất tai nạn là $0.1 \times 0.08 + 0.9 \times 0.01 = 0.017$. Xác suất tài xế say xỉn là $\frac{0.008}{0.017} \approx 47.06\%$.</div>
+        </div>
+
+        <button type="submit" id="submit-btn">Nộp Bài & Kiểm Tra Kết Quả</button>
+    </form>
+
+    <div id="result-box"></div>
+</div>
+
+<script>
+    // Đáp án chuẩn của 10 câu (A, B, C, D)
+    const correctAnswers = {
+        q1: 'A', q2: 'A', q3: 'A', q4: 'A', q5: 'A',
+        q6: 'A', q7: 'A', q8: 'A', q9: 'A', q10: 'A'
+    };
+
+    // Ẩn/Hiện gợi ý câu hỏi
+    function toggleHint(qId) {
+        const hint = document.getElementById(`hint-${qId}`);
+        hint.style.display = (hint.style.display === 'block') ? 'none' : 'block';
+    }
+
+    // Xử lý nộp bài
+    document.getElementById('quiz-form').addEventListener('submit', function(e) {
+        e.preventDefault();
+        let score = 0;
+        const totalQuestions = Object.keys(correctAnswers).length;
+
+        for (let key in correctAnswers) {
+            const questionCard = document.querySelector(`.quiz-card[data-q="${key.replace('q','')}"]`);
+            const selectedOption = document.querySelector(`input[name="${key}"]:checked`);
+            const allLabels = questionCard.querySelectorAll('.option-label');
+            const rationaleBox = questionCard.querySelector('.rationale');
+
+            // Reset định dạng cũ
+            allLabels.forEach(label => {
+                label.classList.remove('correct', 'incorrect');
+            });
+
+            // Hiện phần lời giải chi tiết
+            if(rationaleBox) rationaleBox.style.display = 'block';
+
+            // Tô màu đáp án đúng (Luôn luôn hiển thị đáp án đúng sau khi nộp)
+            allLabels.forEach(label => {
+                if (label.querySelector('input').value === correctAnswers[key]) {
+                    label.classList.add('correct');
+                }
+            });
+
+            // Kiểm tra câu trả lời của người dùng
+            if (selectedOption) {
+                if (selectedOption.value === correctAnswers[key]) {
+                    score++;
+                } else {
+                    // Nếu trả lời sai thì tô đỏ đáp án đã chọn
+                    selectedOption.parentElement.classList.add('incorrect');
+                }
+            }
+        }
+
+        // Hiển thị tổng điểm số công khai phía cuối trang
+        const resultBox = document.getElementById('result-box');
+        resultBox.innerHTML = `Kết quả của bạn: ${score}/${totalQuestions} câu chính xác (${((score/totalQuestions)*100).toFixed(1)}%)`;
+        resultBox.style.display = 'block';
+        
+        // Cuộn màn hình xuống kết quả
+        resultBox.scrollIntoView({ behavior: 'smooth' });
+    });
+</script>
+
+</body>
+</html>

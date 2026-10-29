@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hình Vẽ Tích Phân Kép Chuyên Nghiệp</title>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+            font-size: 28px;
+            margin-bottom: 30px;
+        }
+        .container {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        .panel {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        .panel-title {
+            font-size: 18px;
+            font-weight: bold;
+            color: #3498db;
+            margin-bottom: 15px;
+        }
+        .figure-caption {
+            font-size: 14px;
+            color: #555;
+            margin-top: 15px;
+            font-style: italic;
+        }
+        svg {
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <h1>📐 Ba Phương Pháp Tính Tích Phân Kép</h1>
+
+    <div class="container">
+        <!-- PANEL 1: LOẠI I -->
+        <div class="panel">
+            <div class="panel-title">Loại I: Giới hạn theo x</div>
+            <svg width="400" height="350" viewBox="0 0 400 350">
+                <!-- Axes -->
+                <line x1="50" y1="300" x2="350" y2="300" stroke="black" stroke-width="2.5"/>
+                <line x1="50" y1="300" x2="50" y2="50" stroke="black" stroke-width="2.5"/>
+                
+                <!-- Axis labels -->
+                <text x="345" y="315" font-size="16" font-weight="bold">x</text>
+                <text x="35" y="55" font-size="16" font-weight="bold">y</text>
+                
+                <!-- Region D (Type I) - filled polygon -->
+                <path d="M 100 250 L 100 250 Q 150 220 200 200 Q 250 180 300 200 Q 300 200 300 200 L 300 200 Q 250 150 200 140 Q 150 130 100 180 L 100 180 Z" 
+                      fill="skyblue" fill-opacity="0.6" stroke="none"/>
+                
+                <!-- Lower curve g1(x) -->
+                <path d="M 100 250 Q 150 220 200 200 Q 250 180 300 200" 
+                      stroke="#e74c3c" stroke-width="3" fill="none"/>
+                
+                <!-- Upper curve g2(x) -->
+                <path d="M 100 180 Q 150 130 200 140 Q 250 150 300 200" 
+                      stroke="#e74c3c" stroke-width="3" fill="none"/>
+                
+                <!-- Vertical lines at x=a and x=b -->
+                <line x1="100" y1="250" x2="100" y2="180" stroke="black" stroke-width="2"/>
+                <line x1="300" y1="200" x2="300" y2="200" stroke="black" stroke-width="2"/>
+                
+                <!-- Vertical integration arrows (dy) -->
+                <line x1="150" y1="235" x2="150" y2="165" stroke="#c0392b" stroke-width="2.5"/>
+                <polygon points="150,165 145,175 155,175" fill="#c0392b"/>
+                
+                <line x1="200" y1="215" x2="200" y2="150" stroke="#c0392b" stroke-width="2.5"/>
+                <polygon points="200,150 195,160 205,160" fill="#c0392b"/>
+                
+                <line x1="250" y1="195" x2="250" y2="155" stroke="#c0392b" stroke-width="2.5"/>
+                <polygon points="250,155 245,165 255,165" fill="#c0392b"/>
+                
+                <!-- Horizontal integration arrow (dx) -->
+                <line x1="100" y1="315" x2="300" y2="315" stroke="#c0392b" stroke-width="2.5"/>
+                <polygon points="300,315 290,310 290,320" fill="#c0392b"/>
+                
+                <!-- Labels -->
+                <text x="95" y="330" font-size="14" font-weight="bold">a</text>
+                <text x="305" y="330" font-size="14" font-weight="bold">b</text>
+                <text x="85" y="240" font-size="13" fill="#e74c3c" font-weight="bold">g₁(x)</text>
+                <text x="305" y="130" font-size="13" fill="#e74c3c" font-weight="bold">g₂(x)</text>
+                <text x="160" y="195" font-size="13" fill="#c0392b" font-weight="bold">dy</text>
+                <text x="195" y="310" font-size="13" fill="#c0392b" font-weight="bold">dx</text>
+                <text x="270" y="230" font-size="20" font-weight="bold" fill="#2980b9">D</text>
+            </svg>
+            <div class="figure-caption">
+                \[ \int_{a}^{b} \int_{g_1(x)}^{g_2(x)} f(x,y) \, dy \, dx \]
+            </div>
+        </div>
+
+        <!-- PANEL 2: LOẠI II -->
+        <div class="panel">
+            <div class="panel-title">Loại II: Giới hạn theo y</div>
+            <svg width="400" height="350" viewBox="0 0 400 350">
+                <!-- Axes -->
+                <line x1="50" y1="300" x2="350" y2="300" stroke="black" stroke-width="2.5"/>
+                <line x1="50" y1="300" x2="50" y2="50" stroke="black" stroke-width="2.5"/>
+                
+                <!-- Axis labels -->
+                <text x="345" y="315" font-size="16" font-weight="bold">x</text>
+                <text x="35" y="55" font-size="16" font-weight="bold">y</text>
+                
+                <!-- Region D (Type II) - filled polygon -->
+                <path d="M 150 250 Q 180 220 200 200 Q 220 180 250 170 Q 280 180 300 200 Q 310 220 300 250 Q 280 270 250 280 Q 220 270 200 260 Q 180 270 150 250 Z" 
+                      fill="lightgreen" fill-opacity="0.6" stroke="none"/>
+                
+                <!-- Left curve h1(y) -->
+                <path d="M 150 250 Q 180 220 200 200 Q 220 180 250 170" 
+                      stroke="#e74c3c" stroke-width="3" fill="none"/>
+                
+                <!-- Right curve h2(y) -->
+                <path d="M 250 170 Q 280 180 300 200 Q 310 220 300 250" 
+                      stroke="#e74c3c" stroke-width="3" fill="none"/>
+                
+                <!-- Horizontal integration arrows (dx) -->
+                <line x1="170" y1="240" x2="230" y2="240" stroke="#c0392b" stroke-width="2.5"/>
+                <polygon points="230,240 220,235 220,245" fill="#c0392b"/>
+                
+                <line x1="175" y1="260" x2="240" y2="260" stroke="#c0392b" stroke-width="2.5"/>
+                <polygon points="240,260 230,255 230,265" fill="#c0392b"/>
+                
+                <line x1="190" y1="220" x2="255" y2="220" stroke="#c0392b" stroke-width="2.5"/>
+                <polygon points="255,220 245,215 245,225" fill="#c0392b"/>
+                
+                <!-- Vertical integration arrow (dy) -->
+                <line x1="265" y1="250" x2="265" y2="170" stroke="#c0392b" stroke-width="2.5"/>
+                <polygon points="265,170 260,180 270,180" fill="#c0392b"/>
+                
+                <!-- Labels -->
+                <text x="145" y="265" font-size="14" font-weight="bold">c</text>
+                <text x="265" y="155" font-size="14" font-weight="bold">d</text>
+                <text x="135" y="230" font-size="13" fill="#e74c3c" font-weight="bold">h₁(y)</text>
+                <text x="310" y="200" font-size="13" fill="#e74c3c" font-weight="bold">h₂(y)</text>
+                <text x="210" y="255" font-size="13" fill="#c0392b" font-weight="bold">dx</text>
+                <text x="275" y="210" font-size="13" fill="#c0392b" font-weight="bold">dy</text>
+                <text x="270" y="230" font-size="20" font-weight="bold" fill="#27ae60">D</text>
+            </svg>
+            <div class="figure-caption">
+                \[ \int_{c}^{d} \int_{h_1(y)}^{h_2(y)} f(x,y) \, dx \, dy \]
+            </div>
+        </div>
+
+        <!-- PANEL 3: TỌA ĐỘ CỰC -->
+        <div class="panel">
+            <div class="panel-title">Tọa Độ Cực</div>
+            <svg width="400" height="350" viewBox="0 0 400 350">
+                <!-- Axes -->
+                <line x1="50" y1="300" x2="350" y2="300" stroke="black" stroke-width="2.5"/>
+                <line x1="50" y1="300" x2="50" y2="50" stroke="black" stroke-width="2.5"/>
+                
+                <!-- Axis labels -->
+                <text x="345" y="315" font-size="16" font-weight="bold">x</text>
+                <text x="35" y="55" font-size="16" font-weight="bold">y</text>
+                
+                <!-- Circle (polar region) -->
+                <circle cx="200" cy="200" r="100" fill="orange" fill-opacity="0.5" stroke="#d35400" stroke-width="2.5"/>
+                
+                <!-- Center point -->
+                <circle cx="200" cy="200" r="5" fill="black"/>
+                <text x="193" y="205" font-size="14" font-weight="bold">O</text>
+                
+                <!-- Radius line -->
+                <line x1="200" y1="200" x2="300" y2="200" stroke="#2980b9" stroke-width="2.5"/>
+                <polygon points="300,200 292,195 292,205" fill="#2980b9"/>
+                <text x="255" y="195" font-size="14" font-weight="bold" fill="#2980b9">r</text>
+                
+                <!-- Angle arc -->
+                <path d="M 220 200 A 20 20 0 0 1 217 181" stroke="#e74c3c" stroke-width="2.5" fill="none"/>
+                <text x="230" y="190" font-size="14" font-weight="bold" fill="#e74c3c">θ</text>
+                
+                <!-- Radial line at angle -->
+                <line x1="200" y1="200" x2="287" y2="150" stroke="black" stroke-width="1.5" stroke-dasharray="5,5"/>
+                
+                <!-- dr label -->
+                <line x1="250" y1="200" x2="270" y2="200" stroke="#c0392b" stroke-width="2"/>
+                <text x="255" y="195" font-size="12" font-weight="bold" fill="#c0392b">dr</text>
+                
+                <!-- dθ label -->
+                <path d="M 270 200 A 20 20 0 10 1255 185" stroke="#c0392b" stroke-width="2" fill="none"/>
+                <text x="280" y="185" font-size="12" font-weight="bold" fill="#c0392b">dθ</text>
+                
+                <!-- Formulas -->
+                <text x="60" y="80" font-size="13" font-weight="bold">x = r cos θ</text>
+                <text x="60" y="105" font-size="13" font-weight="bold">y = r sin θ</text>
+                <text x="60" y="130" font-size="13" font-weight="bold" fill="#c0392b">dx dy = r dr dθ</text>
+                
+                <!-- Region label -->
+                <text x="280" y="240" font-size="20" font-weight="bold" fill="#d35400">D</text>
+            </svg>
+            <div class="figure-caption">
+                \[ \int_{0}^{2\pi} \int_{0}^{R} f(r,\theta) \cdot r \, dr \, d\theta \]
+            </div>
+        </div>
+    </div>
+
+    <!-- TÓM TẮT -->
+    <div style="background: white; padding: 25px; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); margin-top: 30px;">
+        <h2 style="color: #3498db; font-size: 22px; border-bottom: 2px solid #3498db; padding-bottom: 10px;">📊 Tóm Tắt Các Dạng Tích Phân Kép</h2>
+        
+        <table style="width: 100%; border-collapse: collapse; margin-top: 15px;">
+            <tr style="background: #3498db; color: white;">
+                <th style="padding: 12px; border: 1px solid #2980b9;">Dạng miền</th>
+                <th style="padding: 12px; border: 1px solid #2980b9;">Ranh giới</th>
+                <th style="padding: 12px; border: 1px solid #2980b9;">Công thức</th>
+            </tr>
+            <tr>
+                <td style="padding: 10px; border: 1px solid #ddd; font-weight: bold; color: #2980b9;">Loại I</td>
+                <td style="padding: 10px; border: 1px solid #ddd;">
+                    \(a \leq x \leq b\)<br>
+                    \(g_1(x) \leq y \leq g_2(x)\)
+                </td>
+                <td style="padding: 10px; border: 1px solid #ddd;">
+                    \(\int_{a}^{b} \int_{g_1(x)}^{g_2(x)} f(x,y) \, dy \, dx\)
+                </td>
+            </tr>
+            <tr style="background: #f8f9fa;">
+                <td style="padding: 10px; border: 1px solid #ddd; font-weight: bold; color: #27ae60;">Loại II</td>
+                <td style="padding: 10px; border: 1px solid #ddd;">
+                    \(c \leq y \leq d\)<br>
+                    \(h_1(y) \leq x \leq h_2(y)\)
+                </td>
+                <td style="padding: 10px; border: 1px solid #ddd;">
+                    \(\int_{c}^{d} \int_{h_1(y)}^{h_2(y)} f(x,y) \, dx \, dy\)
+                </td>
+            </tr>
+            <tr>
+                <td style="padding: 10px; border: 1px solid #ddd; font-weight: bold; color: #d35400;">Tọa độ cực</td>
+                <td style="padding: 10px; border: 1px solid #ddd;">
+                    \(0 \leq r \leq R\)<br>
+                    \(0 \leq \theta \leq 2\pi\)
+                </td>
+                <td style="padding: 10px; border: 1px solid #ddd;">
+                    \(\int_{0}^{2\pi} \int_{0}^{R} f(r,\theta) \cdot r \, dr \, d\theta\)
+                </td>
+            </tr>
+        </table>
+    </div>
+
+    <p style="text-align: center; margin-top: 30px; color: #7f8c8d; font-style: italic;">
+        Hình vẽ minh họa ba phương pháp tính tích phân kép - Tài liệu học tập toán cao cấp
+    </p>
+</body>
+</html>

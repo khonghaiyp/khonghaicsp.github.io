@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bài Tập Trắc Nghiệm Có Hẹn Giờ</title>
+    <style>
+        :root {
+            --primary-color: #673ab7; 
+            --bg-color: #f0f2f5;
+            --correct-bg: #e8f5e9; 
+            --incorrect-bg: #ffebee; 
+            --correct-text: #2e7d32;
+            --incorrect-text: #d32f2f;
+        }
+
+        body {
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-color);
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .quiz-header {
+            width: 100%;
+            background-color: var(--primary-color);
+            color: white;
+            padding: 20px 0;
+            text-align: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .quiz-header h1 {
+            margin: 0;
+            font-size: 1.8rem;
+            font-weight: 400;
+        }
+
+        /* Khung đăng nhập ban đầu */
+        .login-card {
+            width: 100%;
+            max-width: 500px;
+            background: white;
+            padding: 30px;
+            margin-top: 50px;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            text-align: center;
+            box-sizing: border-box;
+            border-top: 10px solid var(--primary-color);
+        }
+
+        .login-card h3 {
+            margin-top: 0;
+            color: #202124;
+        }
+
+        .login-card input[type="text"] {
+            width: 100%;
+            padding: 12px;
+            margin: 15px 0;
+            border: 1px solid #dadce0;
+            border-radius: 4px;
+            font-size: 1rem;
+            box-sizing: border-box;
+            text-align: center;
+        }
+
+        .login-card input[type="text"]:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 2px rgba(103, 58, 183, 0.2);
+        }
+
+        .error-message {
+            color: var(--incorrect-text);
+            font-size: 0.9rem;
+            margin-bottom: 10px;
+            display: none;
+        }
+
+        /* Khu vực hiển thị thời gian làm bài */
+        .quiz-controls-bar {
+            width: 100%;
+            max-width: 770px;
+            background: white;
+            padding: 15px 20px;
+            margin-top: 20px;
+            border-radius: 8px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            display: none; /* Ẩn ban đầu, chỉ hiện khi đã đăng nhập */
+            justify-content: space-between;
+            align-items: center;
+            box-sizing: border-box;
+        }
+
+        #timer {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: #d32f2f;
+        }
+
+        .quiz-body {
+            width: 100%;
+            max-width: 770px;
+            margin-top: 20px;
+            margin-bottom: 40px;
+            display: none; 
+        }
+
+        .question-card {
+            background: white;
+            padding: 24px;
+            margin-bottom: 16px;
+            border-radius: 8px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            border-left: 5px solid transparent;
+            transition: all 0.3s ease;
+        }
+
+        .question-title {
+            font-size: 1.1rem;
+            font-weight: 500;
+            color: #202124;
+            margin-bottom: 16px;
+            margin-top: 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .option-item {
+            display: flex;
+            align-items: center;
+            padding: 10px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-bottom: 4px;
+        }
+
+        .option-item:hover {
+            background-color: #f8f9fa;
+        }
+
+        .option-item input[type="radio"] {
+            margin-right: 14px;
+            width: 18px;
+            height: 18px;
+            accent-color: var(--primary-color);
+            cursor: pointer;
+        }
+
+        .option-label {
+            font-size: 1rem;
+            color: #202124;
+            flex: 1;
+        }
+
+        .submit-container {
+            width: 100%;
+            display: flex;
+            justify-content: flex-start;
+            margin-top: 20px;
+        }
+
+        #start-btn, #submit-btn {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            font-size: 1rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 500;
+            width: 100%;
+        }
+
+        #submit-btn {
+            width: auto;
+        }
+
+        #start-btn:hover, #submit-btn:hover {
+            background-color: #512da8;
+        }
+
+        .question-card.correct {
+            border-left-color: var(--correct-text);
+            background-color: var(--correct-bg);
+        }
+
+        .question-card.incorrect {
+            border-left-color: var(--incorrect-text);
+            background-color: var(--incorrect-bg);
+        }
+
+        .text-correct {
+            font-weight: bold;
+            color: var(--correct-text);
+        }
+
+        #result-summary {
+            width: 100%;
+            max-width: 770px;
+            background: white;
+            padding: 30px;
+            margin-top: 20px;
+            border-radius: 8px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            text-align: center;
+            box-sizing: border-box;
+            display: none; 
+            border-top: 10px solid var(--primary-color);
+        }
+
+        #score-display {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: var(--primary-color);
+            margin: 15px 0;
+        }
+    </style>
+</head>
+<body>
+
+<div class="quiz-header">
+    <h1>Cấu trúc Dữ liệu & Giải thuật - Bài 1</h1>
+</div>
+
+<div id="login-section" class="login-card">
+    <h3>XÁC THỰC THÔNG TIN THI</h3>
+    <p style="color: #5f6368; font-size: 0.9rem;">Vui lòng nhập chính xác Mã số sinh viên để bắt đầu làm bài</p>
+    <input type="text" id="student-id-input" placeholder="Nhập Mã Số Sinh Viên (Ví dụ: SV12345)">
+    <div id="error-msg" class="error-message">Mã số sinh viên không hợp lệ hoặc không có trong danh sách thi!</div>
+    <button id="start-btn" onclick="validateAndStartQuiz()">BẮT ĐẦU LÀM BÀI</button>
+</div>
+
+<div id="controls-bar" class="quiz-controls-bar">
+    <div id="student-info-display" style="font-weight: 500; color: #5f6368;">Sinh viên: --</div>
+    <div id="timer">Thời gian: 05:00</div>
+</div>
+
+<div id="result-summary">
+    <h2 style="margin-top: 0; font-weight: 400;">Kết Quả Bài Thi</h2>
+    <p id="result-student-id" style="font-size: 1.1rem; font-weight: 600; color: #3c4043;"></p>
+    <div id="score-display">-- / 4</div>
+    <p id="time-status-text" style="color: #5f6368;"></p>
+</div>
+
+<div id="quiz-body" class="quiz-body">
+    <form id="quiz-form">
+        
+        <div class="question-card" id="q1-card">
+            <p class="question-title"><span class="title-text">Câu 1: Đâu KHÔNG phải là một cấu trúc dữ liệu tuyến tính?</span></p>
+            <div class="options">
+                <label class="option-item"><input type="radio" name="q1" value="A"><span class="option-label">A. Mảng (Array)</span></label>
+                <label class="option-item"><input type="radio" name="q1" value="B"><span class="option-label">B. Danh sách liên kết (Linked List)</span></label>
+                <label class="option-item"><input type="radio" name="q1" value="C"><span class="option-label">C. Cây (Tree)</span></label>
+                <label class="option-item"><input type="radio" name="q1" value="D"><span class="option-label">D. Ngăn xếp (Stack)</span></label>
+            </div>
+        </div>
+
+        <div class="question-card" id="q2-card">
+            <p class="question-title"><span class="title-text">Câu 2: Thao tác nào thêm một phần tử vào đỉnh của Ngăn xếp (Stack)?</span></p>
+            <div class="options">
+                <label class="option-item"><input type="radio" name="q2" value="A"><span class="option-label">A. Push</span></label>
+                <label class="option-item"><input type="radio" name="q2" value="B"><span class="option-label">B. Pop</span></label>
+                <label class="option-item"><input type="radio" name="q2" value="C"><span class="option-label">C. Peek</span></label>
+                <label class="option-item"><input type="radio" name="q2" value="D"><span class="option-label">D. Enqueue</span></label>
+            </div>
+        </div>
+
+        <div class="question-card" id="q3-card">
+            <p class="question-title"><span class="title-text">Câu 3: Giải thuật Sắp xếp Nổi bọt (Bubble Sort) có độ phức tạp thời gian trung bình là bao nhiêu?</span></p>
+            <div class="options">
+                <label class="option-item"><input type="radio" name="q3" value="A"><span class="option-label">A. O(n)</span></label>
+                <label class="option-item"><input type="radio" name="q3" value="B"><span class="option-label">B. O(n²)</span></label>
+                <label class="option-item"><input type="radio" name="q3" value="C"><span class="option-label">C. O(log n)</span></label>
+                <label class="option-item"><input type="radio" name="q3" value="D"><span class="option-label">D. O(n log n)</span></label>
+            </div>
+        </div>
+
+        <div class="question-card" id="q4-card">
+            <p class="question-title"><span class="title-text">Câu 4: Trong Danh sách liên kết đơn, mỗi nút chứa những thành phần gì?</span></p>
+            <div class="options">
+                <label class="option-item"><input type="radio" name="q4" value="A"><span class="option-label">A. Chỉ chứa dữ liệu</span></label>
+                <label class="option-item"><input type="radio" name="q4" value="B"><span class="option-label">B. Chỉ chứa con trỏ đến nút trước đó</span></label>
+                <label class="option-item"><input type="radio" name="q4" value="C"><span class="option-label">C. Dữ liệu và con trỏ đến nút tiếp theo</span></label>
+                <label class="option-item"><input type="radio" name="q4" value="D"><span class="option-label">D. Dữ liệu và con trỏ đến nút gốc</span></label>
+            </div>
+        </div>
+
+        <div class="submit-container">
+            <button type="button" id="submit-btn" onclick="submitQuiz(false)">Nộp Bài</button>
+        </div>
+    </form>
+</div>
+
+<script>
+    // --- 1. DANH SÁCH MÃ SỐ SINH VIÊN ĐƯỢC PHÉP THI ---
+    // Bạn hãy chỉnh sửa hoặc thêm các mã số sinh viên hợp lệ vào mảng này
+    const validStudentIDs = ["SV12345", "SV67890", "20261102", "B20DCCN123"];
+
+    // --- 2. BẢNG ĐÁP ÁN CHUẨN ---
+    const correctAnswers = {
+        q1: "C",
+        q2: "A",
+        q3: "B",
+        q4: "C"
+    };
+
+    let timeLeft = 300; // 5 phút (300 giây)
+    let timerInterval;
+    let isQuizFinished = false;
+    let loggedInStudentID = "";
+
+    // Hàm kiểm tra MSSV và kích hoạt bài thi
+    function validateAndStartQuiz() {
+        const inputField = document.getElementById('student-id-input');
+        const errorMsg = document.getElementById('error-msg');
+        const studentID = inputField.value.trim(); // Loại bỏ khoảng trắng thừa
+
+        // Kiểm tra xem MSSV nhập vào có tồn tại trong danh sách hợp lệ không
+        if (validStudentIDs.includes(studentID)) {
+            loggedInStudentID = studentID; // Lưu lại mã số sinh viên
+            errorMsg.style.display = 'none'; // Ẩn thông báo lỗi nếu có
+            
+            // Tiến hành mở giao diện bài thi
+            startQuiz();
+        } else {
+            // Hiển thị thông báo lỗi nếu sai mã
+            errorMsg.style.display = 'block';
+            inputField.focus();
+        }
+    }
+
+    // Hàm khởi động đồng hồ & hiện câu hỏi
+    function startQuiz() {
+        // Ẩn khung đăng nhập
+        document.getElementById('login-section').style.display = 'none';
+        
+        // Hiện thanh công cụ (MSSV + Đồng hồ) và Thân bài thi
+        document.getElementById('controls-bar').style.display = 'flex';
+        document.getElementById('quiz-body').style.display = 'block';
+        document.getElementById('student-info-display').textContent = `Sinh viên: ${loggedInStudentID}`;
+
+        updateTimerDisplay();
+
+        // Chạy đếm ngược định kỳ
+        timerInterval = setInterval(function() {
+            timeLeft--;
+            updateTimerDisplay();
+
+            if (timeLeft <= 0) {
+                clearInterval(timerInterval);
+                submitQuiz(true); // Tự động nộp khi hết giờ
+            }
+        }, 1000);
+    }
+
+    // Hàm hiển thị thời gian mm:ss
+    function updateTimerDisplay() {
+        let minutes = Math.floor(timeLeft / 60);
+        let seconds = timeLeft % 60;
+        minutes = minutes < 10 ? '0' + minutes : minutes;
+        seconds = seconds < 10 ? '0' + seconds : seconds;
+        document.getElementById('timer').textContent = `Thời gian: ${minutes}:${seconds}`;
+    }
+
+    // Hàm tính điểm và xuất kết quả
+    function submitQuiz(isTimeout = false) {
+        if (isQuizFinished) return;
+        isQuizFinished = true;
+
+        clearInterval(timerInterval);
+        document.getElementById('timer').style.color = "#a7aeb8";
+
+        // Vô hiệu hóa toàn bộ ô tích chọn
+        const allInputs = document.querySelectorAll('input[type="radio"]');
+        allInputs.forEach(input => input.disabled = true);
+        document.getElementById('submit-btn').style.display = 'none';
+
+        let score = 0;
+        const totalQuestions = Object.keys(correctAnswers).length;
+        const form = document.getElementById('quiz-form');
+        const formData = new FormData(form);
+
+        // 1. Tính điểm số chính xác trước
+        for (let key in correctAnswers) {
+            const userAnswer = formData.get(key);
+            if (userAnswer === correctAnswers[key]) {
+                score++;
+            }
+        }
+
+        // 2. Duyệt qua từng câu để hiển thị giao diện xanh/đỏ (đáp án đúng/sai)
+        for (let key in correctAnswers) {
+            const userAnswer = formData.get(key);
+            const correctAnswer = correctAnswers[key];
+            const questionCard = document.getElementById(`${key}-card`);
+            const titleElement = questionCard.querySelector('.question-title');
+
+            if (userAnswer === correctAnswer) {
+                questionCard.classList.add('correct');
+                titleElement.innerHTML += ' <span style="color:var(--correct-text); font-size:1.3rem;">✓</span>';
+            } else {
+                questionCard.classList.add('incorrect');
+                titleElement.innerHTML += ' <span style="color:var(--incorrect-text); font-size:1.3rem;">✕</span>';
+            }
+
+            // In đậm đáp án đúng của câu
+            const optionsInCard = questionCard.querySelectorAll('input[type="radio"]');
+            optionsInCard.forEach(input => {
+                if (input.value === correctAnswer) {
+                    const labelSpan = input.nextElementSibling || input.parentElement.querySelector('.option-label');
+                    if (labelSpan) {
+                        labelSpan.classList.add('text-correct');
+                        labelSpan.innerHTML += ' (Đáp án đúng)';
+                    }
+                }
+            });
+        }
+
+        // 3. Xuất kết quả lên đầu trang HTML
+        document.getElementById('quiz-body').style.display = 'none'; 
+        document.getElementById('controls-bar').style.display = 'none'; 
+        
+        document.getElementById('result-summary').style.display = 'block'; 
+        document.getElementById('result-student-id').textContent = `Mã số sinh viên: ${loggedInStudentID}`;
+        document.getElementById('score-display').textContent = `${score} / ${totalQuestions}`;
+        
+        const statusText = document.getElementById('time-status-text');
+        if (isTimeout) {
+            statusText.textContent = "Bài thi đã tự động khóa vì HẾT GIỜ.";
+            statusText.style.color = "var(--incorrect-text)";
+        } else {
+            statusText.textContent = "Nộp bài thi thành công.";
+            statusText.style.color = "var(--correct-text)";
+        }
+
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+</script>
+
+</body>
+</html>

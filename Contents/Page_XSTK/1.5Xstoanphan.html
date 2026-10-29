@@ -1,0 +1,642 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>1.4 Bài tập Công thức xác suất toàn phần</title>
+
+  <!-- Cấu hình và nhúng MathJax -->
+  <script>
+    MathJax = {
+      tex: { 
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['$$', '$$'], ['\\[', '\\]']]
+      },
+      svg: { fontCache: 'global' }
+    };
+  </script>
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+  <!-- CSS Tổng hợp -->
+  <style>
+    body {
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+      background: #f6f8fb;
+      color: #111;
+      margin: 20px;
+      line-height: 1.6;
+    }
+    .container {
+      max-width: 900px; 
+      margin: 0 auto;
+    }
+    h1 {
+      text-align: center;
+      color: #003366;
+      font-size: 1.8rem;
+      margin-bottom: 20px;
+    }
+    
+    /* Style cho phần Trắc nghiệm */
+    .question {
+      background: #fff;
+      border: 1px solid #e3e8ef;
+      padding: 15px 20px;
+      border-radius: 8px;
+      margin-bottom: 15px;
+      box-shadow: 0 4px 14px rgba(20,30,50,0.03);
+    }
+    .question p { font-weight: bold; margin-top: 0; }
+    .question label { display: block; margin: 8px 0; cursor: pointer; }
+    
+    .btn-submit-quiz {
+      background-color: #2563eb;
+      color: white;
+      border: none;
+      padding: 12px 20px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 16px;
+      font-weight: bold;
+      transition: 0.2s;
+      box-shadow: 0 6px 12px rgba(37,99,235,0.12);
+      margin-top: 10px;
+    }
+    .btn-submit-quiz:hover { background-color: #1d4ed8; }
+    
+    .result {
+      font-weight: bold; 
+      color: #0056b3; 
+      margin-top: 20px;
+      background: #eef2ff;
+      padding: 15px;
+      border-radius: 8px;
+      font-size: 1.2rem;
+      text-align: center;
+      display: none;
+    }
+
+    /* Bảng trong câu hỏi */
+    table.dist {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 10px 0;
+      text-align: center;
+    }
+    table.dist th, table.dist td {
+      border: 1px solid #e2e8f0;
+      padding: 8px 12px;
+    }
+    table.dist th {
+      background-color: #f0f7ff;
+      color: #003366;
+    }
+
+    /* Style cho phần Bình luận (Thảo luận) */
+    .chapter-box {
+      background: #fff;
+      border-radius: 10px;
+      padding: 25px;
+      margin-top: 40px;
+      margin-bottom: 25px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+      border-top: 4px solid #0055aa;
+    }
+    .chapter-box h2 {
+      color: #0055aa;
+      margin-top: 0;
+    }
+    .btn-toggle {
+      background-color: #e2e8f0;
+      color: #2b6cb0;
+      border: none;
+      padding: 8px 15px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 15px;
+      font-weight: bold;
+      transition: 0.2s;
+      margin-bottom: 10px;
+    }
+    .btn-toggle:hover { background-color: #cbd5e0; }
+    
+    .section-content {
+      display: none;
+      margin-top: 15px;
+      padding-top: 20px;
+      border-top: 2px dashed #e2e8f0;
+    }
+    .section-content.active { display: block !important; }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    input[type="text"], input[type="email"], textarea {
+      padding: 12px;
+      font-size: 15px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-family: inherit;
+    }
+    .btn-submit-comment {
+      padding: 10px 20px;
+      font-size: 16px;
+      background-color: #0056b3;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      width: 160px;
+      font-weight: bold;
+    }
+    .btn-submit-comment:hover { background-color: #004494; }
+    
+    .comments-list {
+      margin-top: 20px;
+      background: #f8fafc;
+      padding: 15px;
+      border-radius: 6px;
+      border: 1px solid #e2e8f0;
+    }
+    
+    .comment-node { margin-top: 15px; }
+    .comment-level-0 {
+      border-bottom: 1px solid #e2e8f0;
+      padding-bottom: 15px;
+      margin-bottom: 15px;
+    }
+    .comment-level-0:last-child {
+      border-bottom: none;
+      margin-bottom: 0;
+      padding-bottom: 0;
+    }
+    .comment-children {
+      margin-left: 20px;
+      padding-left: 15px;
+      border-left: 2px solid #cbd5e0;
+    }
+
+    .btn-reply {
+      background: none;
+      border: none;
+      color: #4a5568;
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: bold;
+      padding: 0;
+      margin-top: 8px;
+    }
+    .btn-reply:hover {
+      text-decoration: underline;
+      color: #2b6cb0;
+    }
+    
+    .reply-form-container {
+      display: none;
+      margin-top: 10px;
+      background: #edf2f7;
+      padding: 12px;
+      border-radius: 6px;
+    }
+    .reply-form-container.active { display: block; }
+    .reply-form-container input, .reply-form-container textarea {
+      padding: 8px;
+      font-size: 14px;
+    }
+    .reply-form-container .btn-submit-comment {
+      font-size: 14px;
+      padding: 8px 15px;
+      width: auto;
+    }
+    .author {
+      text-align: right;
+      font-style: italic;
+      margin-top: 30px;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  
+  <!-- ================= PHẦN 1: TRẮC NGHIỆM ================= -->
+  <h1>1.4 Công thức xác suất toàn phần</h1>
+  <p class="author">
+    Biên soạn: <strong>Ts. Khổng Văn Hải</strong><br>
+    Khoa Toán - Tin, Đại học Bách Khoa Hà Nội <br>
+    Email: khonghaicsp@gmail.com, hai.khongvan@hust.edu.vn
+  </p>
+  <form id="quizForm">
+
+<div class="question" data-qid="q1">
+  <p><strong>Câu 1.</strong> Hộp 1 có 3 bi đỏ, 4 bi xanh. Hộp 2 có 5 bi đỏ, 3 bi xanh. Lấy ngẫu nhiên 1 bi từ hộp 1 bỏ sang hộp 2, sau đó từ hộp 2 lấy ra 1 bi. Tính xác suất bi lấy ra lần thứ 2 có màu đỏ.</p>
+  <label><input type="checkbox" name="q1" value="A"> A. 38/63</label>
+  <label><input type="checkbox" name="q1" value="B"> B. 31/63</label>
+  <label><input type="checkbox" name="q1" value="C"> C. 35/63</label>
+  <label><input type="checkbox" name="q1" value="D"> D. 18/63</label>
+  <label><input type="checkbox" name="q1" value="E"> E. 20/63</label>
+</div>
+
+<div class="question" data-qid="q2">
+  <p><strong>Câu 2.</strong> Nhà máy có 3 phân xưởng I, II, III sản xuất lần lượt 25%, 35% và 40% sản lượng. Tỉ lệ phế phẩm của các phân xưởng tương ứng là 1%, 2% và 3%. Chọn ngẫu nhiên 1 sản phẩm của nhà máy. Xác suất sản phẩm đó là phế phẩm bằng:</p>
+  <label><input type="checkbox" name="q2" value="A"> A. 0,0215</label>
+  <label><input type="checkbox" name="q2" value="B"> B. 0,0250</label>
+  <label><input type="checkbox" name="q2" value="C"> C. 0,0195</label>
+  <label><input type="checkbox" name="q2" value="D"> D. 0,0225</label>
+  <label><input type="checkbox" name="q2" value="E"> E. 0,0300</label>
+</div>
+
+<div class="question" data-qid="q3">
+  <p><strong>Câu 3.</strong> Tỉ lệ người mắc bệnh A trong dân số là 2%. Một phương pháp xét nghiệm có tỉ lệ dương tính giả là 5% (người không bệnh nhưng kết quả xét nghiệm dương tính), và độ nhạy 99% (người có bệnh chắc chắn 99% xét nghiệm dương tính). Chọn ngẫu nhiên 1 người để xét nghiệm. Tính xác suất kết quả xét nghiệm của người đó là dương tính.</p>
+  <label><input type="checkbox" name="q3" value="A"> A. 0,0688</label>
+  <label><input type="checkbox" name="q3" value="B"> B. 0,0490</label>
+  <label><input type="checkbox" name="q3" value="C"> C. 0,0500</label>
+  <label><input type="checkbox" name="q3" value="D"> D. 0,0698</label>
+  <label><input type="checkbox" name="q3" value="E"> E. 0,0198</label>
+</div>
+
+<div class="question" data-qid="q4">
+  <p><strong>Câu 4.</strong> Tín hiệu phát đi chỉ nhận giá trị 0 hoặc 1 với xác suất tương ứng là 0,4 và 0,6. Do nhiễu trên đường truyền, tín hiệu 0 bị thu nhầm thành 1 với xác suất 0,1; tín hiệu 1 bị thu nhầm thành 0 với xác suất 0,2. Tính xác suất để trạm thu nhận được tín hiệu 1.</p>
+  <label><input type="checkbox" name="q4" value="A"> A. 0,52</label>
+  <label><input type="checkbox" name="q4" value="B"> B. 0,48</label>
+  <label><input type="checkbox" name="q4" value="C"> C. 0,60</label>
+  <label><input type="checkbox" name="q4" value="D"> D. 0,50</label>
+  <label><input type="checkbox" name="q4" value="E"> E. 0,56</label>
+</div>
+
+<div class="question" data-qid="q5">
+  <p><strong>Câu 5.</strong> Có 3 hộp bi nhìn bề ngoài giống hệt nhau. Hộp 1 có 2 bi trắng, 3 bi đen; Hộp 2 có 4 bi trắng, 1 bi đen; Hộp 3 có 3 bi trắng, 2 bi đen. Một người chọn ngẫu nhiên một hộp, rồi từ hộp đó lấy ngẫu nhiên 2 viên bi (không hoàn lại). Xác suất để 2 viên bi lấy ra đều có màu trắng là:</p>
+  <label><input type="checkbox" name="q5" value="A"> A. 1/3</label>
+  <label><input type="checkbox" name="q5" value="B"> B. 3/10</label>
+  <label><input type="checkbox" name="q5" value="C"> C. 2/5</label>
+  <label><input type="checkbox" name="q5" value="D"> D. 7/15</label>
+  <label><input type="checkbox" name="q5" value="E"> E. 1/4</label>
+</div>
+
+<div class="question" data-qid="q6">
+  <p><strong>Câu 6.</strong> Hộp 1 có 5 bi đỏ, 5 bi xanh. Hộp 2 có 4 bi đỏ, 6 bi xanh. Tung một con xúc xắc cân đối đồng chất. Nếu xúc xắc xuất hiện mặt 1 hoặc 2 chấm, ta lấy 2 bi từ hộp 1. Nếu xuất hiện các mặt khác, ta lấy 2 bi từ hộp 2. Tính xác suất lấy được 1 bi đỏ và 1 bi xanh.</p>
+  <label><input type="checkbox" name="q6" value="A"> A. 73/135</label>
+  <label><input type="checkbox" name="q6" value="B"> B. 75/135</label>
+  <label><input type="checkbox" name="q6" value="C"> C. 5/27</label>
+  <label><input type="checkbox" name="q6" value="D"> D. 16/45</label>
+  <label><input type="checkbox" name="q6" value="E"> E. 64/135</label>
+</div>
+
+<div class="question" data-qid="q7">
+  <p><strong>Câu 7.</strong> Giả sử thời tiết tuân theo chuỗi: Nếu hôm nay trời mưa, xác suất ngày mai mưa là 0,7. Nếu hôm nay không mưa, xác suất ngày mai mưa là 0,4. Biết xác suất trời mưa vào thứ Hai là 0,5. Xác suất trời mưa vào thứ Tư trong cùng tuần đó là:</p>
+  <label><input type="checkbox" name="q7" value="A"> A. 0,565</label>
+  <label><input type="checkbox" name="q7" value="B"> B. 0,550</label>
+  <label><input type="checkbox" name="q7" value="C"> C. 0,450</label>
+  <label><input type="checkbox" name="q7" value="D"> D. 0,575</label>
+  <label><input type="checkbox" name="q7" value="E"> E. 0,385</label>
+</div>
+
+<div class="question" data-qid="q8">
+  <p><strong>Câu 8.</strong> Có 3 loại bệnh A, B, C với tỉ lệ mắc trong dân số lần lượt là 1%, 2% và 3% (giả sử không ai mắc đồng thời 2 bệnh trở lên). Tỉ lệ có triệu chứng \(X\) đối với người mắc bệnh A, B, C lần lượt là 80%, 60%, 40%. Ở những người không mắc 3 bệnh này, tỉ lệ có triệu chứng \(X\) là 5%. Chọn ngẫu nhiên 1 người, xác suất người này có triệu chứng \(X\) là:</p>
+  <label><input type="checkbox" name="q8" value="A"> A. 0,079</label>
+  <label><input type="checkbox" name="q8" value="B"> B. 0,085</label>
+  <label><input type="checkbox" name="q8" value="C"> C. 0,094</label>
+  <label><input type="checkbox" name="q8" value="D"> D. 0,112</label>
+  <label><input type="checkbox" name="q8" value="E"> E. 0,065</label>
+</div>
+
+<div class="question" data-qid="q9">
+  <p><strong>Câu 9.</strong> Cho hệ đầy đủ các biến cố \(\{H_1, H_2, H_3\}\) với \(P(H_1) = 0,2\); \(P(H_2) = 0,3\); \(P(H_3) = 0,5\). Biến cố \(A\) thỏa mãn \(P(A|H_1) = 0,4\); \(P(A|H_2) = 0,6\) và \(P(A|H_3) = x\). Biết \(P(A) = 0,56\). Giá trị của \(x\) là:</p>
+  <label><input type="checkbox" name="q9" value="A"> A. 0,6</label>
+  <label><input type="checkbox" name="q9" value="B"> B. 0,5</label>
+  <label><input type="checkbox" name="q9" value="C"> C. 0,4</label>
+  <label><input type="checkbox" name="q9" value="D"> D. 0,7</label>
+  <label><input type="checkbox" name="q9" value="E"> E. 0,8</label>
+</div>
+
+<div class="question" data-qid="q10">
+  <p><strong>Câu 10.</strong> Một lô hàng có tỉ lệ phế phẩm là \(p=0,2\). Người ta kiểm tra ngẫu nhiên từng sản phẩm một (có hoàn lại) cho đến khi gặp phế phẩm thì dừng lại. Tính xác suất để quá trình kiểm tra dừng lại ở một lần kiểm tra có thứ tự chẵn (lần 2, lần 4, lần 6,...).</p>
+  <label><input type="checkbox" name="q10" value="A"> A. 4/9</label>
+  <label><input type="checkbox" name="q10" value="B"> B. 5/9</label>
+  <label><input type="checkbox" name="q10" value="C"> C. 1/3</label>
+  <label><input type="checkbox" name="q10" value="D"> D. 2/5</label>
+  <label><input type="checkbox" name="q10" value="E"> E. 3/5</label>
+</div>
+
+<div class="question" data-qid="q11">
+  <p><strong>Câu 11.</strong> Hộp 1 có 6 bi đỏ, 4 bi xanh. Hộp 2 có 3 bi đỏ, 7 bi xanh. Lấy ngẫu nhiên đồng thời <strong>2 viên bi</strong> từ hộp 1 bỏ sang hộp 2. Sau khi trộn đều, từ hộp 2 lấy ra ngẫu nhiên 1 viên bi. Xác suất để viên bi lấy ra từ hộp 2 có màu đỏ là:</p>
+  <label><input type="checkbox" name="q11" value="A"> A. 0,35</label>
+  <label><input type="checkbox" name="q11" value="B"> B. 0,33</label>
+  <label><input type="checkbox" name="q11" value="C"> C. 0,30</label>
+  <label><input type="checkbox" name="q11" value="D"> D. 0,40</label>
+  <label><input type="checkbox" name="q11" value="E"> E. 0,45</label>
+</div>
+
+<div class="question" data-qid="q12">
+  <p><strong>Câu 12.</strong> Cho biến ngẫu nhiên liên tục \(X \sim U(0,1)\) (phân phối đều trên khoảng \((0,1)\)). Nếu \(X=x\), người ta dùng một đồng xu không cân đối mà xác suất ra sấp là \(x\) để tung độc lập đúng 3 lần. Tính xác suất để có đúng 2 lần đồng xu ra mặt sấp.</p>
+  <label><input type="checkbox" name="q12" value="A"> A. 0,25</label>
+  <label><input type="checkbox" name="q12" value="B"> B. 0,33</label>
+  <label><input type="checkbox" name="q12" value="C"> C. 0,20</label>
+  <label><input type="checkbox" name="q12" value="D"> D. 0,50</label>
+  <label><input type="checkbox" name="q12" value="E"> E. 0,15</label>
+</div>
+
+<div class="question" data-qid="q13">
+  <p><strong>Câu 13.</strong> Một thiết bị gồm 2 bộ phận, khả năng hỏng của chúng độc lập với nhau và xác suất hỏng tương ứng là 0,1 và 0,2. Nếu có đúng 1 bộ phận hỏng, thiết bị sẽ ngừng hoạt động với xác suất 0,5. Nếu cả 2 bộ phận hỏng, thiết bị chắc chắn ngừng hoạt động. Nếu không có bộ phận nào hỏng, thiết bị hoạt động bình thường. Tính xác suất thiết bị ngừng hoạt động.</p>
+  <label><input type="checkbox" name="q13" value="A"> A. 0,15</label>
+  <label><input type="checkbox" name="q13" value="B"> B. 0,26</label>
+  <label><input type="checkbox" name="q13" value="C"> C. 0,13</label>
+  <label><input type="checkbox" name="q13" value="D"> D. 0,02</label>
+  <label><input type="checkbox" name="q13" value="E"> E. 0,28</label>
+</div>
+
+<div class="question" data-qid="q14">
+  <p><strong>Câu 14.</strong> Người ta có 3 đồng xu: đồng xu thứ nhất cân đối đồng chất; đồng xu thứ hai có 2 mặt đều là sấp; đồng xu thứ ba có xác suất ra sấp là 0,7. Một người chọn ngẫu nhiên 1 đồng xu (với xác suất như nhau) và tung đồng xu đó 3 lần độc lập. Tính xác suất thu được đúng 2 lần mặt sấp.</p>
+  <label><input type="checkbox" name="q14" value="A"> A. 0,272</label>
+  <label><input type="checkbox" name="q14" value="B"> B. 0,375</label>
+  <label><input type="checkbox" name="q14" value="C"> C. 0,441</label>
+  <label><input type="checkbox" name="q14" value="D"> D. 0,333</label>
+  <label><input type="checkbox" name="q14" value="E"> E. 0,256</label>
+</div>
+
+<div class="question" data-qid="q15">
+  <p><strong>Câu 15.</strong> Gieo một con xúc xắc cân đối, đồng chất. Nếu xuất hiện mặt \(k\) chấm (\(1 \le k \le 6\)), ta sẽ rút ngẫu nhiên đồng thời \(k\) viên bi từ một hộp đang chứa 5 bi đỏ và 5 bi xanh. Tính xác suất để tất cả các viên bi rút ra đều có màu đỏ?</p>
+  <label><input type="checkbox" name="q15" value="A"> A. 5/36</label>
+  <label><input type="checkbox" name="q15" value="B"> B. 7/36</label>
+  <label><input type="checkbox" name="q15" value="C"> C. 1/6</label>
+  <label><input type="checkbox" name="q15" value="D"> D. 5/42</label>
+  <label><input type="checkbox" name="q15" value="E"> E. 1/12</label>
+</div>
+
+<div class="question" data-qid="q16">
+  <p><strong>Câu 16.</strong> Sinh viên đi thi gặp 2 loại đề thi: Dễ (chiếm 60%) và Khó (chiếm 40%). Phân tích thống kê cho thấy, xác suất một sinh viên ngẫu nhiên làm được bài nếu gặp đề dễ là 0,85 và nếu gặp đề khó là 0,4. Tính xác suất sinh viên đó làm được bài thi.</p>
+  <label><input type="checkbox" name="q16" value="A"> A. 0,67</label>
+  <label><input type="checkbox" name="q16" value="B"> B. 0,51</label>
+  <label><input type="checkbox" name="q16" value="C"> C. 0,60</label>
+  <label><input type="checkbox" name="q16" value="D"> D. 0,75</label>
+  <label><input type="checkbox" name="q16" value="E"> E. 0,65</label>
+</div>
+
+<div class="question" data-qid="q17">
+  <p><strong>Câu 17.</strong> Một bức thư được mã hóa bằng dải kí tự 0 hoặc 1, trong đó kí tự 0 chiếm 40% và 1 chiếm 60%. Thư được truyền đi và phải đi qua 2 trạm tiếp sóng liên tiếp. Xác suất truyền sai kí tự ở mỗi trạm là độc lập với nhau và bằng 0,1 (tức là 0 thành 1, và 1 thành 0). Xác suất nhận được kí tự 1 ở đích đến cuối cùng là:</p>
+  <label><input type="checkbox" name="q17" value="A"> A. 0,564</label>
+  <label><input type="checkbox" name="q17" value="B"> B. 0,492</label>
+  <label><input type="checkbox" name="q17" value="C"> C. 0,500</label>
+  <label><input type="checkbox" name="q17" value="D"> D. 0,600</label>
+  <label><input type="checkbox" name="q17" value="E"> E. 0,436</label>
+</div>
+
+<div class="question" data-qid="q18">
+  <p><strong>Câu 18.</strong> Hộp ban đầu chứa 2 bi trắng và 3 bi đen. Người ta thực hiện quy trình sau: Rút ngẫu nhiên 1 viên bi, ghi lại màu rồi trả lại vào hộp, đồng thời bỏ thêm vào hộp 2 viên bi CÙNG MÀU với viên bi vừa rút (mô hình cái bình Polya). Sau đó trộn đều và rút ngẫu nhiên 1 viên bi thứ hai. Xác suất rút được viên bi thứ hai màu đen là:</p>
+  <label><input type="checkbox" name="q18" value="A"> A. 3/5</label>
+  <label><input type="checkbox" name="q18" value="B"> B. 5/7</label>
+  <label><input type="checkbox" name="q18" value="C"> C. 3/7</label>
+  <label><input type="checkbox" name="q18" value="D"> D. 18/35</label>
+  <label><input type="checkbox" name="q18" value="E"> E. 2/5</label>
+</div>
+
+<div class="question" data-qid="q19">
+  <p><strong>Câu 19.</strong> Trong một bài thi trắc nghiệm khách quan có 4 phương án lựa chọn (1 đúng, 3 sai), sinh viên thực sự biết câu trả lời với xác suất là \(p=0,7\). Nếu không biết, sinh viên bắt buộc đoán mò ngẫu nhiên một trong 4 phương án. Tính xác suất sinh viên này trả lời đúng câu hỏi.</p>
+  <label><input type="checkbox" name="q19" value="A"> A. 0,775</label>
+  <label><input type="checkbox" name="q19" value="B"> B. 0,700</label>
+  <label><input type="checkbox" name="q19" value="C"> C. 0,075</label>
+  <label><input type="checkbox" name="q19" value="D"> D. 0,850</label>
+  <label><input type="checkbox" name="q19" value="E"> E. 0,750</label>
+</div>
+
+<div class="question" data-qid="q20">
+  <p><strong>Câu 20.</strong> Số lượng khách hàng đến một cửa hàng trong một ngày là biến ngẫu nhiên \(N\) tuân theo phân phối Poisson với tham số \(\lambda = 10\). Xác suất mỗi khách hàng quyết định mua hàng là \(p=0,3\) và quyết định của mỗi người là độc lập với nhau. Tính xác suất không có bất kỳ khách hàng nào mua hàng trong ngày hôm đó.</p>
+  <label><input type="checkbox" name="q20" value="A"> A. \(e^{-3}\)</label>
+  <label><input type="checkbox" name="q20" value="B"> B. \(e^{-10}\)</label>
+  <label><input type="checkbox" name="q20" value="C"> C. \(e^{-7}\)</label>
+  <label><input type="checkbox" name="q20" value="D"> D. \(e^{-2.1}\)</label>
+  <label><input type="checkbox" name="q20" value="E"> E. \(e^{-1}\)</label>
+</div>
+
+
+
+    <!-- <button type="button" class="btn-submit-quiz" onclick="checkAnswers()">Nộp bài</button> -->
+  </form>
+  <div class="result" id="result"></div>
+
+
+  <!-- ================= PHẦN 2: THẢO LUẬN & BÌNH LUẬN ================= -->
+  <div class="chapter-box">
+    <h2>Thảo luận đáp án & Giải đáp thắc mắc</h2>
+    <p>Nếu bạn có thắc mắc, có cách giải hay hơn hoặc muốn thảo luận về mức độ khó của bài kiểm tra trên, vui lòng để lại bình luận dưới đây.</p>
+    <button class="btn-toggle" onclick="toggleSection('commentSection')">💬 Ẩn / Hiện Bình luận</button>
+    
+    <div id="commentSection" class="section-content active">
+      <form id="formQuizComment" class="form-group">
+        <input type="text" id="nameQuiz" placeholder="Tên hiển thị (Ẩn danh hoặc Tên thật)..." required>
+        <input type="email" id="emailQuiz" placeholder="Email cá nhân (Tuỳ chọn - để nhận thông báo khi có người phản hồi)">
+        <textarea id="textQuiz" placeholder="Nhập câu hỏi, ví dụ: 'Thầy và các bạn cho em/mình hỏi câu 20 giải như thế nào ạ?'..." rows="3" required></textarea>
+        <button type="submit" class="btn-submit-comment">Gửi bình luận</button>
+      </form>
+      <div id="listQuiz" class="comments-list"><i>Đang tải dữ liệu...</i></div>
+    </div>
+  </div>
+
+</div>
+
+
+<!-- ================= JAVASCRIPT XỬ LÝ (TRẮC NGHIỆM & BÌNH LUẬN) ================= -->
+<script>
+  // 1. CHẤM ĐIỂM TRẮC NGHIỆM
+  function checkAnswers() {
+    const correctAnswers = {
+      q1: ['A'], q2: ['A'], q3: ['A'], q4: ['A'], q5: ['A'],
+      q6: ['A'], q7: ['A'], q8: ['A'], q9: ['A'], q10: ['A'],
+      q11: ['A'], q12: ['A'], q13: ['A'], q14: ['A'], q15: ['A'],
+      q16: ['A'], q17: ['A'], q18: ['A'], q19: ['A'], q20: ['A']
+    };
+
+    let score = 0;
+    const total = Object.keys(correctAnswers).length;
+
+    for (let qid in correctAnswers) {
+      const selected = Array.from(document.querySelectorAll(`input[name="${qid}"]:checked`)).map(el => el.value);
+      const correct = correctAnswers[qid];
+      const isCorrect = selected.length === correct.length && selected.every(v => correct.includes(v));
+      
+      // Highlight màu cho đáp án đúng/sai (Tùy chọn hiển thị nâng cao)
+      const questionDiv = document.querySelector(`div[data-qid="${qid}"]`);
+      if (isCorrect) {
+        score++;
+        questionDiv.style.borderLeft = "5px solid #10b981"; // Xanh lá
+      } else {
+        questionDiv.style.borderLeft = "5px solid #ef4444"; // Đỏ
+      }
+    }
+
+    const resultDiv = document.getElementById('result');
+    resultDiv.style.display = 'block';
+    resultDiv.innerHTML = `✅ Bạn được <span style="font-size:1.5rem; color:#d97706;">${score}/${total}</span> điểm.`;
+    
+    // Tự động cuộn xuống kết quả
+    resultDiv.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }
+
+  // 2. HỆ THỐNG BÌNH LUẬN
+  const scriptURL = 'https://script.google.com/macros/s/AKfycbzoDtNpO6c74ANE6q8Mxs-VWUp4rOiGyPp6-LRLh83I7InsdiK3W2_04hvJAUeahC0C/exec';
+  window._reloaders = {}; 
+
+  function toggleSection(id) {
+    const section = document.getElementById(id);
+    if (section) section.classList.toggle('active');
+  }
+
+  function toggleReplyForm(chapter, safeCommentId) {
+    const form = document.getElementById(`reply-form-${chapter}-${safeCommentId}`);
+    if (form) form.classList.toggle('active');
+  }
+
+  function submitReply(event, chapter, originalParentId) {
+    event.preventDefault();
+    const form = event.target;
+    const nameInput = form.querySelector('.reply-name');
+    const emailInput = form.querySelector('.reply-email'); 
+    const textInput = form.querySelector('.reply-text');
+    const submitBtn = form.querySelector('.btn-submit-comment');
+    
+    submitBtn.innerText = 'Đang gửi...';
+    submitBtn.disabled = true;
+
+    const formData = new URLSearchParams();
+    formData.append('chapter', chapter);
+    formData.append('name', nameInput.value);
+    formData.append('email', emailInput ? emailInput.value : '');
+    formData.append('comment', textInput.value);
+    formData.append('parentId', originalParentId); 
+
+    fetch(scriptURL, { method: 'POST', body: formData, mode: 'no-cors' })
+      .then(() => {
+        nameInput.value = '';
+        if(emailInput) emailInput.value = '';
+        textInput.value = '';
+        submitBtn.innerText = 'Gửi phản hồi';
+        submitBtn.disabled = false;
+        if (window._reloaders[chapter]) window._reloaders[chapter]();
+      })
+      .catch(() => {
+        alert('Có lỗi xảy ra khi gửi phản hồi.');
+        submitBtn.innerText = 'Gửi phản hồi';
+        submitBtn.disabled = false;
+      });
+  }
+
+  function setupCommentSystem(config) {
+    const { chapter, formId, nameId, emailId, textId, listId } = config;
+
+    function loadComments() {
+      fetch(`${scriptURL}?chapter=${encodeURIComponent(chapter)}`)
+        .then(res => res.json())
+        .then(data => {
+          const commentsByParent = {};
+          
+          data.forEach(c => {
+            const id = c.id || c.time; 
+            c.id = id;
+            c.safeId = id.toString().replace(/[^a-zA-Z0-9]/g, '_');
+            const parentKey = (c.parentId && c.parentId !== "null" && c.parentId !== "") ? c.parentId : "root";
+            
+            if (!commentsByParent[parentKey]) {
+              commentsByParent[parentKey] = [];
+            }
+            commentsByParent[parentKey].push(c);
+          });
+
+          if (commentsByParent["root"]) commentsByParent["root"].reverse();
+
+          function renderCommentsTree(parentId, level) {
+            const children = commentsByParent[parentId];
+            if (!children || children.length === 0) return '';
+
+            let html = '';
+            children.forEach(c => {
+              const nameColor = level === 0 ? '#0056b3' : '#2b6cb0';
+              html += `
+                <div class="comment-node comment-level-${level}">
+                  <strong style="color: ${nameColor};">${c.name}</strong> 
+                  <span style="font-size: 0.8em; color: #888; margin-left: 10px;">${c.time}</span>
+                  <div style="margin-top: 5px; white-space: pre-wrap;">${c.comment}</div>
+                  
+                  <button class="btn-reply" onclick="toggleReplyForm('${chapter}', '${c.safeId}')">↩ Phản hồi</button>
+
+                  <div class="reply-form-container" id="reply-form-${chapter}-${c.safeId}">
+                    <form class="form-group" onsubmit="submitReply(event, '${chapter}', '${c.id}')">
+                      <input type="text" class="reply-name" placeholder="Tên hiển thị..." required>
+                      <input type="email" class="reply-email" placeholder="Email cá nhân (Tuỳ chọn)...">
+                      <textarea class="reply-text" placeholder="Nhập câu trả lời..." rows="2" required></textarea>
+                      <button type="submit" class="btn-submit-comment">Gửi</button>
+                    </form>
+                  </div>
+                  
+                  <div class="comment-children">
+                    ${renderCommentsTree(c.id, level + 1)}
+                  </div>
+                </div>
+              `;
+            });
+            return html;
+          }
+
+          const finalHtml = renderCommentsTree("root", 0);
+          document.getElementById(listId).innerHTML = finalHtml || '<i>Chưa có bình luận nào. Hãy là người đầu tiên!</i>';
+          
+          if (window.MathJax && MathJax.typesetPromise) MathJax.typesetPromise();
+        })
+        .catch(() => {
+          document.getElementById(listId).innerHTML = '<i style="color:red;">Lỗi kết nối hoặc đang chờ phản hồi từ máy chủ.</i>';
+        });
+    }
+
+    window._reloaders[chapter] = loadComments;
+
+    document.getElementById(formId).addEventListener('submit', function(e) {
+      e.preventDefault();
+      const name = document.getElementById(nameId).value;
+      const emailInput = document.getElementById(emailId);
+      const email = emailInput ? emailInput.value : '';
+      const comment = document.getElementById(textId).value;
+      const submitBtn = this.querySelector('button');
+      
+      submitBtn.innerText = 'Đang gửi...';
+      submitBtn.disabled = true;
+
+      const formData = new URLSearchParams();
+      formData.append('chapter', chapter);
+      formData.append('name', name);
+      formData.append('email', email);
+      formData.append('comment', comment);
+      formData.append('parentId', '');
+
+      fetch(scriptURL, { method: 'POST', body: formData, mode: 'no-cors' })
+      .then(() => {
+        document.getElementById(textId).value = '';
+        if (emailInput) emailInput.value = '';
+        submitBtn.innerText = 'Gửi bình luận';
+        submitBtn.disabled = false;
+        setTimeout(loadComments, 1000); 
+      })
+      .catch(() => {
+        alert('Có lỗi xảy ra khi gửi bài.');
+        submitBtn.innerText = 'Gửi bình luận';
+        submitBtn.disabled = false;
+      });
+    });
+
+    loadComments();
+  }
+
+  // Khởi tạo khu vực bình luận dành riêng cho bài Trắc nghiệm này
+  // (Lưu trên Google Sheet dưới chapter: '1.5Xstoanphan')
+  setupCommentSystem({ 
+    chapter: '1.5Xstoanphan', 
+    formId: 'formQuizComment', 
+    nameId: 'nameQuiz', 
+    emailId: 'emailQuiz', 
+    textId: 'textQuiz', 
+    listId: 'listQuiz' 
+  });
+</script>
+
+</body>
+</html>
